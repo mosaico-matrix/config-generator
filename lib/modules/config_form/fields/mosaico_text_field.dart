@@ -7,11 +7,25 @@ class MosaicoTextField extends MosaicoField {
   MosaicoTextField(String name, {Key? key}) : super(name, key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return TextField(
+  Widget buildField(BuildContext context) {
+
+    return TextFormField(
+      textCapitalization: TextCapitalization.sentences,
+      validator: (value) {
+        if (value == null || value.isEmpty && isRequired()) {
+          return 'Please enter some text';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         labelText: getLabel(),
+        hintText: getPlaceholder(),
+        hintStyle: TextStyle(color: Color(0xFFCCCCCC)),
+        fillColor: Colors.transparent,
       ),
+      onFieldSubmitted: (value) {
+        print(value);
+      },
     );
   }
 }

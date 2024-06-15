@@ -6,9 +6,9 @@ import 'package:mosaico_flutter_core/widgets/mobile_size.dart';
 import 'package:provider/provider.dart';
 
 import '../components/dynamic_form.dart';
-import '../config_output.dart';
+import '../models/config_output.dart';
 import '../form_builder.dart';
-import '../state/dynamic_form_state.dart';
+import '../models/dynamic_form_model.dart';
 
 /**
  * This is the main page of the configuration generator
@@ -25,10 +25,7 @@ class ConfigGenerator extends StatelessWidget {
   Widget build(BuildContext context) {
 
     // Create the form based on the JSON provided
-    var form = FormBuilder(jsonDecode(_configFormJson)).buildForm();
-
-    // Create state for the form
-    var formState = DynamicFormState(form);
+    var formState = FormStateBuilder(jsonDecode(_configFormJson)).buildFormModel();
 
     // Create page
     return MosaicoCore(
@@ -43,7 +40,17 @@ class ConfigGenerator extends StatelessWidget {
                 ),
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
-                    var formState = Provider.of<DynamicFormState>(context, listen: false);
+
+                    // Get form state
+                    var formState = Provider.of<DynamicFormModel>(context, listen: false);
+
+                    // Try to validate the form
+                    if (!formState.validate()) {
+                      print('Form is not valid');
+                      return;
+                    }
+
+
                     var output = ConfigOutput(formState);
                     Navigator.of(context).pop(output);
                   },

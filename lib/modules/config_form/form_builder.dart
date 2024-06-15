@@ -1,30 +1,38 @@
 
+import 'package:mosaico_flutter_core/modules/config_form/models/dynamic_form_model.dart';
+
 import 'fields/mosaico_field.dart';
 import 'fields/mosaico_text_field.dart';
-import 'form.dart';
 
-class FormBuilder {
+class FormStateBuilder {
   
   /// The form that is being built
-  Form _form = Form();
+  DynamicFormModel _formModel = DynamicFormModel();
 
 
   void _addTextField(String name, Map<String, dynamic> attributes) {
     MosaicoTextField field = MosaicoTextField(name);
     _addComponentAttributes(field, attributes);
-    _form.addField(field);
+    _formModel.addField(field);
   }
 
 
   void _addComponentAttributes(
       MosaicoField component, Map<String, dynamic> attributes) {
     component.setLabel(attributes['label']);
+    component.setPlaceholder(attributes['placeholder']);
+    component.setRequired(attributes['required']);
   }
   
-  FormBuilder(Map<String, dynamic> json) {
+  FormStateBuilder(Map<String, dynamic> json) {
     
     // Get form and fields
     var form = json['form'];
+
+    // Set title and description
+    _formModel.setTitle(form['title']);
+    _formModel.setDescription(form['description']);
+
     var fields = form['fields'];
 
     // Cycle through all fields
@@ -49,8 +57,8 @@ class FormBuilder {
   }
 
 
-  Form buildForm() {
-    return _form;
+  DynamicFormModel buildFormModel() {
+    return _formModel;
   }
 
 }
