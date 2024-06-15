@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mosaico_config_generator/form/state/dynamic_form_state.dart';
+import 'package:mosaico_flutter_core/mosaico_core.dart';
 import 'package:provider/provider.dart';
 
 import '../components/dynamic_form.dart';
 import '../config_output.dart';
 import '../form_builder.dart';
+import '../state/dynamic_form_state.dart';
 
 /**
  * This is the main page of the configuration generator
@@ -29,25 +30,27 @@ class ConfigGenerator extends StatelessWidget {
     var formState = DynamicFormState(form);
 
     // Create page
-    return ChangeNotifierProvider(
-      create: (context) => formState,
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Configuration Generator'),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                var formState = Provider.of<DynamicFormState>(context, listen: false);
-                var output = ConfigOutput(formState);
-                Navigator.of(context).pop(output);
-              },
-              child: const Icon(Icons.save),
-            ),
-            body: DynamicForm(),
-          );
-        }
+    return MosaicoCore(
+      child: ChangeNotifierProvider(
+        create: (context) => formState,
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Configuration Generator'),
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  var formState = Provider.of<DynamicFormState>(context, listen: false);
+                  var output = ConfigOutput(formState);
+                  Navigator.of(context).pop(output);
+                },
+                child: const Icon(Icons.save),
+              ),
+              body: DynamicForm(),
+            );
+          }
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
-import 'package:mosaico_config_generator/form/form.dart';
 
 import 'fields/mosaico_field.dart';
 import 'fields/mosaico_text_field.dart';
+import 'form.dart';
 
 class FormBuilder {
   

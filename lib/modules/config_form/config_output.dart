@@ -1,5 +1,5 @@
 
-import 'package:mosaico_config_generator/form/state/dynamic_form_state.dart';
+import 'package:mosaico_flutter_core/modules/config_form/state/dynamic_form_state.dart';
 
 /// This is the class that will be used to store the output of the configuration
 class ConfigOutput
