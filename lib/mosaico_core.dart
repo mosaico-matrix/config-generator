@@ -9,14 +9,6 @@ class MosaicoCore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'Dotted',
-        colorScheme: AppColorScheme.getDefaultColorScheme(),
-      ),
-      home: Builder(
-        builder: (context) => child,
-      ),
-    );
+    return child;
   }
 }

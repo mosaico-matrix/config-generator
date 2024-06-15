@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mosaico_flutter_core/mosaico_core.dart';
+import 'package:mosaico_flutter_core/widgets/mobile_size.dart';
 import 'package:provider/provider.dart';
 
 import '../components/dynamic_form.dart';
@@ -31,25 +32,27 @@ class ConfigGenerator extends StatelessWidget {
 
     // Create page
     return MosaicoCore(
-      child: ChangeNotifierProvider(
-        create: (context) => formState,
-        child: Builder(
-          builder: (context) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Configuration Generator'),
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  var formState = Provider.of<DynamicFormState>(context, listen: false);
-                  var output = ConfigOutput(formState);
-                  Navigator.of(context).pop(output);
-                },
-                child: const Icon(Icons.save),
-              ),
-              body: DynamicForm(),
-            );
-          }
+      child: MobileSize(
+        child: ChangeNotifierProvider(
+          create: (context) => formState,
+          child: Builder(
+            builder: (context) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: const Text('Configuration Generator'),
+                ),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    var formState = Provider.of<DynamicFormState>(context, listen: false);
+                    var output = ConfigOutput(formState);
+                    Navigator.of(context).pop(output);
+                  },
+                  child: const Icon(Icons.save),
+                ),
+                body: DynamicForm(),
+              );
+            }
+          ),
         ),
       ),
     );

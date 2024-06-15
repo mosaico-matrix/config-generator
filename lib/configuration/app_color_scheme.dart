@@ -3,26 +3,30 @@ import 'package:flutter/material.dart';
 class AppColorScheme {
   static ColorScheme getDefaultColorScheme() {
     return const ColorScheme(
-      primary: Color(0xFF000000),
-      // Customize your primary color
+
+      // Main colors
+      primary: Color(0xFFFFFFFF),
       secondary: Color(0xFF0320DA),
-      // Customize your secondary color
-      surface: Color(0xFFE0E0E0),
-      // Customize your surface color
-      background: Color(0xFF202020),
-      // Customize your background color
+
+      // Background color
+      surface: Color(0xFF1C1C1C),
+
+      // Error stuff
       error: Color(0xFFB00020),
-      // Customize your error color
-      onPrimary: Colors.white,
-      // Customize your onPrimary color
-      onSecondary: Colors.black,
-      // Customize your onSecondary color
-      onSurface: Colors.black,
-      // Customize your onSurface color
-      onBackground: Colors.black,
-      // Customize your onBackground color
+
+      // Inverse of primary
+      onPrimary: Colors.black,
+
+      // Inverse of secondary
+      onSecondary: Colors.white,
+
+      // Inverse of surface
+      onSurface: Colors.white,
+
+      // Inverse of error
       onError: Colors.white,
-      // Customize your onError color
+
+
       brightness: Brightness.light, // Specify the brightness
     );
   }
