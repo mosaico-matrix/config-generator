@@ -6,8 +6,8 @@ class ConfigOutput
 {
   String test = "GG";
 
-  ConfigOutput(ConfigFormState state)
+  ConfigOutput(DynamicFormState state)
   {
-    test = state.jsonContent;
+
   }
 }

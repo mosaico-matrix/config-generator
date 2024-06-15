@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-abstract class Field extends StatelessWidget
+abstract class MosaicoField extends StatelessWidget
 {
   final String _name;
   late String _label;
-  Field(this._name, {Key? key}) : super(key: key)
+  MosaicoField(this._name, {Key? key}) : super(key: key)
   {
     _label = _name;
   }
