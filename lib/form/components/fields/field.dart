@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-abstract class Component extends StatelessWidget
+abstract class Field extends StatelessWidget
 {
-  late String _name;
+  final String _name;
   late String _label;
-  Component(String name, {Key? key}) : super(key: key)
+  Field(this._name, {Key? key}) : super(key: key)
   {
-    _name = name;
-    _label = name;
+    _label = _name;
   }
 
 

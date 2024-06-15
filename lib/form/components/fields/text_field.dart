@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mosaico_config_generator/form/components/component.dart';
+import 'package:mosaico_config_generator/form/components/fields/field.dart';
 
-class TextInput extends Component {
-  TextInput(String name, {Key? key}) : super(name, key: key);
+class TextField extends Field {
+
+  TextField(String name, {Key? key}) : super(name, key: key);
 
   @override
   Widget build(BuildContext context) {
