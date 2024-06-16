@@ -1,63 +1,75 @@
-
-import 'package:mosaico_flutter_core/modules/config_form/models/dynamic_form_model.dart';
-
+import 'dart:convert';
+import 'package:mosaico_flutter_core/modules/config_form/states/dynamic_form_state.dart';
 import 'fields/mosaico_field.dart';
-import 'fields/mosaico_text_field.dart';
+import 'fields/mosaico_string_field.dart';
 
-class FormStateBuilder {
-  
+class FormModelBuilder {
+
   /// The form that is being built
-  DynamicFormModel _formModel = DynamicFormModel();
+  DynamicFormState _formModel = DynamicFormState();
 
 
-  void _addTextField(String name, Map<String, dynamic> attributes) {
-    MosaicoTextField field = MosaicoTextField(name);
-    _addComponentAttributes(field, attributes);
-    _formModel.addField(field);
-  }
-
-
-  void _addComponentAttributes(
-      MosaicoField component, Map<String, dynamic> attributes) {
+  /// Adds the common attributes to a generic mosaico componet
+  void _addComponentAttributes(MosaicoField component, Map<String, dynamic> attributes) {
     component.setLabel(attributes['label']);
     component.setPlaceholder(attributes['placeholder']);
     component.setRequired(attributes['required']);
   }
-  
-  FormStateBuilder(Map<String, dynamic> json) {
-    
-    // Get form and fields
-    var form = json['form'];
+
+  FormModelBuilder(String json) {
+
+    // Get the main form
+    var form = jsonDecode(json)['form'];
 
     // Set title and description
     _formModel.setTitle(form['title']);
     _formModel.setDescription(form['description']);
 
+    // Get fields
     var fields = form['fields'];
 
     // Cycle through all fields
     for (var field in fields) {
-      
+
       // Get field key (name of the field)
       for (var fieldName in field.keys) {
-    
+
         // Retrieve field attributes
         var attributes = field[fieldName];
 
         // Add the final field to the form based on its type
+        MosaicoField mosaicoField;
         switch (attributes['type']) {
+          case 'string':
+            mosaicoField = MosaicoStringField(fieldName);
+            break;
           case 'text':
-            _addTextField(fieldName, attributes);
+            throw Exception('Text field not implemented yet');
+            break;
+          case 'checkbox':
+            throw Exception('Checkbox field not implemented yet');
+            break;
+          case 'image':
+            throw Exception('Image field not implemented yet');
+            break;
+          case 'animation':
+            throw Exception('Animation field not implemented yet');
             break;
           default:
             throw Exception('Unknown field type: ${attributes['type']}');
         }
+
+        // Add common attributes
+        _addComponentAttributes(mosaicoField, attributes);
+
+        // Add the field to the form
+        _formModel.addField(mosaicoField);
       }
     }
   }
 
 
-  DynamicFormModel buildFormModel() {
+  DynamicFormState buildFormModel() {
     return _formModel;
   }
 

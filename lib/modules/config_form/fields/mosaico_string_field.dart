@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'mosaico_field.dart';
 
-class MosaicoTextField extends MosaicoField {
+class MosaicoStringField extends MosaicoField {
 
-  MosaicoTextField(String name, {Key? key}) : super(name, key: key);
+  MosaicoStringField(String name, {Key? key}) : super(name, key: key);
 
   @override
   Widget buildField(BuildContext context) {

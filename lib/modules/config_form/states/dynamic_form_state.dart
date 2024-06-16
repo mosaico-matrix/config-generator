@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import '../fields/mosaico_field.dart';
 
 /// This class represents the state of the dynamic form.
-class DynamicFormModel extends ChangeNotifier {
+class DynamicFormState extends ChangeNotifier {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  DynamicFormModel();
+  DynamicFormState();
 
   /**
    * Form information

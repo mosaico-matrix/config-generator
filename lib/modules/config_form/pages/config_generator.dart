@@ -6,13 +6,13 @@ import 'package:mosaico_flutter_core/widgets/mobile_size.dart';
 import 'package:provider/provider.dart';
 
 import '../components/dynamic_form.dart';
-import '../models/config_output.dart';
+import '../states/config_output.dart';
 import '../form_builder.dart';
-import '../models/dynamic_form_model.dart';
+import '../states/dynamic_form_state.dart';
 
 /**
  * This is the main page of the configuration generator
- * It will create the context where all the stuff is happening
+ * It will create the form state where all the stuff is happening
  * It will create the dynamic_form component where the fields are going to be displayed
  * It will create the button to generate the configuration, close the page and return the result
  */
@@ -25,13 +25,13 @@ class ConfigGenerator extends StatelessWidget {
   Widget build(BuildContext context) {
 
     // Create the form based on the JSON provided
-    var formState = FormStateBuilder(jsonDecode(_configFormJson)).buildFormModel();
+    var formModel = FormModelBuilder(_configFormJson).buildFormModel();
 
     // Create page
     return MosaicoCore(
       child: MobileSize(
         child: ChangeNotifierProvider(
-          create: (context) => formState,
+          create: (context) => formModel,
           child: Builder(
             builder: (context) {
               return Scaffold(
@@ -42,7 +42,7 @@ class ConfigGenerator extends StatelessWidget {
                   onPressed: () {
 
                     // Get form state
-                    var formState = Provider.of<DynamicFormModel>(context, listen: false);
+                    var formState = Provider.of<DynamicFormState>(context, listen: false);
 
                     // Try to validate the form
                     if (!formState.validate()) {

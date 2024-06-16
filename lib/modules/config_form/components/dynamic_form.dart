@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mosaico_flutter_core/modules/config_form/fields/mosaico_field.dart';
 import 'package:provider/provider.dart';
 
-import '../models/dynamic_form_model.dart';
+import '../states/dynamic_form_state.dart';
 
 /**
  * This widget is used to display a dynamic form based on the user's configuration
- * It will display the list of fields provided by the dynamic_form_state
+ * It will display the list of fields provided by the [DynamicFormState]
  */
 class DynamicForm extends StatelessWidget {
   const DynamicForm({super.key});
@@ -16,7 +16,7 @@ class DynamicForm extends StatelessWidget {
   Widget build(BuildContext context) {
 
     // Get generated form model
-    var formModel = Provider.of<DynamicFormModel>(context);
+    var formModel = Provider.of<DynamicFormState>(context);
 
     return Center(
       child: Padding(
@@ -32,6 +32,8 @@ class DynamicForm extends StatelessWidget {
     );
   }
 
+  /// Builds the form based on the fields provided
+  /// Shares the key with the form state in order to validate the form the main widget
   Widget _buildForm(List<MosaicoField> fields, GlobalKey<FormState> formKey) {
     return Form(
       key: formKey,
@@ -44,6 +46,8 @@ class DynamicForm extends StatelessWidget {
     );
   }
 
+  /// Builds the header of the form
+  /// It will display the title and description of the form
   Widget _buildHeader(String title, String description) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
