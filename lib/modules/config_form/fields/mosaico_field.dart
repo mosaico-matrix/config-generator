@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:mosaico_flutter_core/modules/config_form/states/dynamic_form_state.dart';
+import 'package:provider/provider.dart';
 
 abstract class MosaicoField extends StatelessWidget
 {
-  final String _name;
   MosaicoField(this._name, {Key? key}) : super(key: key)
   {
     _label = _name;
   }
 
   /*
-  * Field information
+  * Basic field stuff
   */
+  final String _name;
+  String getName()
+  {
+    return _name;
+  }
 
   late String _label;
   void setLabel(String label)
@@ -39,13 +45,14 @@ abstract class MosaicoField extends StatelessWidget
     return _required;
   }
 
-  Widget buildField(BuildContext context);
+  // This needs to be overridden by inheritors
+  Widget buildField(BuildContext context, DynamicFormState state);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: buildField(context),
+      child: buildField(context, Provider.of<DynamicFormState>(context))
     );
   }
 }

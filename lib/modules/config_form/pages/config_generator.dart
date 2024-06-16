@@ -6,7 +6,7 @@ import 'package:mosaico_flutter_core/widgets/mobile_size.dart';
 import 'package:provider/provider.dart';
 
 import '../components/dynamic_form.dart';
-import '../states/config_output.dart';
+import '../models/config_output.dart';
 import '../form_builder.dart';
 import '../states/dynamic_form_state.dart';
 
@@ -39,20 +39,18 @@ class ConfigGenerator extends StatelessWidget {
                   title: const Text('Configuration Generator'),
                 ),
                 floatingActionButton: FloatingActionButton(
-                  onPressed: () {
+                  onPressed: () async {
 
                     // Get form state
                     var formState = Provider.of<DynamicFormState>(context, listen: false);
 
                     // Try to validate the form
                     if (!formState.validate()) {
-                      print('Form is not valid');
                       return;
                     }
 
-
-                    var output = ConfigOutput(formState);
-                    Navigator.of(context).pop(output);
+                    // Get output model with all the needed data
+                    Navigator.of(context).pop(await formState.export());
                   },
                   child: const Icon(Icons.save),
                 ),

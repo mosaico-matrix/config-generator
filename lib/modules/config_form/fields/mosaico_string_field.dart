@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosaico_flutter_core/modules/config_form/states/dynamic_form_state.dart';
 
 import 'mosaico_field.dart';
 
@@ -7,7 +8,7 @@ class MosaicoStringField extends MosaicoField {
   MosaicoStringField(String name, {Key? key}) : super(name, key: key);
 
   @override
-  Widget buildField(BuildContext context) {
+  Widget buildField(BuildContext context, DynamicFormState formState) {
 
     return TextFormField(
       textCapitalization: TextCapitalization.sentences,
@@ -23,8 +24,8 @@ class MosaicoStringField extends MosaicoField {
         hintStyle: TextStyle(color: Color(0xFFCCCCCC)),
         fillColor: Colors.transparent,
       ),
-      onFieldSubmitted: (value) {
-        print(value);
+      onChanged: (String value){
+        formState.updateStringData(getName(), value);
       },
     );
   }
