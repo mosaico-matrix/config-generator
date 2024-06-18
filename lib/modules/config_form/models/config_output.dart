@@ -55,13 +55,27 @@ class ConfigOutput {
 
     // Create an archive
     final encoder = TarFileEncoder();
-    encoder.open(outputFile.path);
+    encoder.open('$_tempPath/config.tar');
 
     // Add the contents of the directory to the archive
     encoder.addDirectory(sourceDir, includeDirName: false);
 
-    // Close the archive to finalize the tar.gz file
+    // Close the archive to finalize the tar file
     encoder.close();
+
+    // Read the tar file
+    final tarFile = File('$_tempPath/config.tar');
+    final tarBytes = tarFile.readAsBytesSync();
+
+    // Compress the tar file using gzip
+    final gzBytes = GZipEncoder().encode(tarBytes);
+
+    // Write the compressed file to disk
+    outputFile.writeAsBytesSync(gzBytes!);
+
+    // Optionally delete the intermediate tar file
+    tarFile.deleteSync();
+
     return outputFile.path;
   }
 

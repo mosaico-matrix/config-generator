@@ -7,6 +7,7 @@ import '../../models/serializable.dart';
 
 
 class BaseService {
+
   // Logger
   static final logger = Logger(
     printer: PrettyPrinter(),

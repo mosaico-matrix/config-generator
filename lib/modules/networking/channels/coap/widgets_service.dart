@@ -4,7 +4,7 @@ import 'package:mosaico_flutter_core/toaster.dart';
 import '../../models/widget.dart';
 import 'base_service.dart';
 
-class WidgetService {
+class WidgetsService {
 
   static Future<void> installWidget(int id) async {
     await BaseService.post('/installed_widgets', '{"id": $id}');

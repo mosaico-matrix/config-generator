@@ -3,16 +3,23 @@ import 'dart:convert';
 import 'package:coap/coap.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mosaico_flutter_core/toaster.dart';
 
 import '../../../../exceptions/coap_exception.dart';
 
 // Base CoAP client class
 class BaseService {
+
+  // Logger
+  static final logger = Logger(
+    printer: PrettyPrinter(),
+  );
+
   static final _client = CoapClient(
     Uri(
       scheme: 'coap',
-      host: '10.0.2.2',
+      host: '198.19.249.145', //ubuntu.orb.local,10.0.2.2
       port: 5683,
     ),
     config: CoapConfig(),
@@ -20,6 +27,7 @@ class BaseService {
 
   static Future<dynamic> _processResponse(CoapResponse response) async {
     final decodedResponse = json.decode(response.payloadString);
+    print(decodedResponse);
     final message = decodedResponse['message'];
     if (message != null && message.isNotEmpty) {
       response.isSuccess ? Toaster.success(message) : Toaster.error(message);
@@ -28,6 +36,9 @@ class BaseService {
   }
 
   static Future<dynamic> get(String path) async {
+
+    logger.d("GET: $path");
+
     try {
       final response = await _client.get(Uri(path: path));
       return _processResponse(response);
@@ -38,6 +49,9 @@ class BaseService {
 
   static Future<dynamic> post(String path, String payload,
       [List<Option<Object>>? options]) async {
+
+    logger.d("POST: $path");
+
     try {
       final response = await _client.post(Uri(path: path),
           payload: payload, options: options);
@@ -49,6 +63,9 @@ class BaseService {
 
   static Future<dynamic> put(String path, String payload,
       [List<Option<Object>>? options]) async {
+
+    logger.d("PUT: $path");
+
     try {
       final response = await _client.put(Uri(path: path),
           payload: payload, options: options);

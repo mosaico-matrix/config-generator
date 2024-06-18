@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mosaico_flutter_core/modules/config_form/fields/mosaico_field.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,12 @@ class DynamicForm extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
         child: ListView(
             children: [
+
+              // Header
               _buildHeader(formModel.getTitle(), formModel.getDescription()),
               SizedBox(height: 20),
+
+              // Form
               _buildForm(formModel.getFields(), formModel.getFormKey()),
             ],
           ),
@@ -39,6 +44,7 @@ class DynamicForm extends StatelessWidget {
       key: formKey,
       child: Column(
         children: [
+          // Actual form fields
           for (var field in fields)
             field
         ],

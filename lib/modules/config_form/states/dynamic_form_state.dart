@@ -7,6 +7,7 @@ import '../fields/mosaico_field.dart';
 
 /// This class represents the state of the dynamic form.
 class DynamicFormState extends ChangeNotifier {
+
   /**
    * Form information
    */
@@ -32,6 +33,22 @@ class DynamicFormState extends ChangeNotifier {
   /// Get the description of the form
   String getDescription() {
     return _description;
+  }
+
+  /**
+   * Name of the configuration
+   * This is used to discriminate between different configurations of the same widget
+   */
+  String _configName = "";
+
+  /// Set the name of the configuration
+  void setConfigName(String name) {
+    _configName = name;
+  }
+
+  /// Get the name of the configuration
+  String getConfigName() {
+    return _configName;
   }
 
   /**
