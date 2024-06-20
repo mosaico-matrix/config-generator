@@ -27,7 +27,7 @@ class BaseService {
 
   static Future<dynamic> _processResponse(CoapResponse response) async {
     final decodedResponse = json.decode(response.payloadString);
-    print(decodedResponse);
+    logger.d(decodedResponse);
     final message = decodedResponse['message'];
     if (message != null && message.isNotEmpty) {
       response.isSuccess ? Toaster.success(message) : Toaster.error(message);
@@ -41,6 +41,18 @@ class BaseService {
 
     try {
       final response = await _client.get(Uri(path: path));
+      return _processResponse(response);
+    } catch (e) {
+      throw CoapException();
+    }
+  }
+
+  static Future<dynamic> delete(String path) async {
+
+    logger.d("DELETE: $path");
+
+    try {
+      final response = await _client.delete(Uri(path: path));
       return _processResponse(response);
     } catch (e) {
       throw CoapException();
@@ -74,6 +86,8 @@ class BaseService {
       throw CoapException();
     }
   }
+
+
 }
 
 

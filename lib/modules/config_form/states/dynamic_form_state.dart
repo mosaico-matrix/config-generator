@@ -44,6 +44,7 @@ class DynamicFormState extends ChangeNotifier {
   /// Set the name of the configuration
   void setConfigName(String name) {
     _configName = name;
+    notifyListeners();
   }
 
   /// Get the name of the configuration
@@ -96,6 +97,7 @@ class DynamicFormState extends ChangeNotifier {
     var output = ConfigOutput();
     await output.initialize();
     output.setData(_data);
+    output.setConfigName(_configName);
     return output;
   }
 }

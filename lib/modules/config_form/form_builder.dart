@@ -16,10 +16,10 @@ class FormModelBuilder {
     component.setRequired(attributes['required']);
   }
 
-  FormModelBuilder(String json) {
+  FormModelBuilder(Map<String, dynamic> configForm) {
 
     // Get the main form
-    var form = jsonDecode(json)['form'];
+    var form = configForm['form'];
 
     // Set title and description
     _formModel.setTitle(form['title']);

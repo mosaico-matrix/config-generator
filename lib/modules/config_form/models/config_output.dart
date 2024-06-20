@@ -8,6 +8,7 @@ class ConfigOutput {
 
   late final String _tempPath;
   late final String _dataOutputPath;
+  late final String _configName;
 
   /// Initialize the _tempPath
   /// CALL THIS BEFORE SETTING ANYTHING!
@@ -27,10 +28,24 @@ class ConfigOutput {
   }
 
   /**
+   * Configuration name
+   */
+  void setConfigName(String name) {
+    _configName = name;
+  }
+  String getConfigName() {
+    return _configName;
+  }
+
+  /**
    * Save files to disk in temp folder as they are provided
    */
   void setData(Map<String, dynamic> data) {
     File('$_dataOutputPath/data.json').writeAsStringSync(jsonEncode(data));
+  }
+
+  Map<String, dynamic> getData() {
+    return jsonDecode(File('$_dataOutputPath/data.json').readAsStringSync());
   }
 
   void addImage(String name, File image) {
