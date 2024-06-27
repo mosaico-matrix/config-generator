@@ -25,7 +25,7 @@ class WidgetsService {
   /**
    * active_widget
    */
-  static const String _activeWidgetUri = _baseUri + '/active_widget';
+  static const String _activeWidgetUri = _baseUri + '/active';
 
   static Future<void> previewWidget(int widgetId, int configId) async {
     await BaseService.post(
