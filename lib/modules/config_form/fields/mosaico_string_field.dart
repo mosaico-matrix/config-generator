@@ -5,6 +5,7 @@ import 'mosaico_field.dart';
 
 class MosaicoStringField extends MosaicoField {
 
+  String _value = "";
   MosaicoStringField(String name, {Key? key}) : super(name, key: key);
 
   @override
@@ -24,9 +25,14 @@ class MosaicoStringField extends MosaicoField {
         hintStyle: TextStyle(color: Color(0xFFCCCCCC)),
         fillColor: Colors.transparent,
       ),
-      onChanged: (String value){
-        formState.updateStringData(getName(), value);
+      onChanged: (value) {
+        _value = value;
       },
     );
+  }
+
+  @override
+  String getScriptCode() {
+    return 'global ${getName()} = "$_value";';
   }
 }

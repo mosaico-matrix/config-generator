@@ -12,7 +12,6 @@ void handleException(Object error, StackTrace stackTrace)
   switch (error.runtimeType) {
     case CoapException:
       Toaster.error(error.toString());
-      logger.e("CoAP Exception: $error");
       break;
   }
 }

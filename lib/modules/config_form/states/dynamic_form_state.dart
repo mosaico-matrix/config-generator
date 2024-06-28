@@ -84,20 +84,23 @@ class DynamicFormState extends ChangeNotifier {
   /**
    * Final output
    */
-  Map<String, dynamic> _data = {};
-  void updateStringData(String key, String value) {
-    _data[key] = value;
-  }
-  void updateTextData(String key, String text, Color color, int size)
+
+  String buildConfigScript()
   {
-
+    String _script = "";
+    for (var field in _fields) {
+      _script += field.getScriptCode() + "\n";
+    }
+    return _script;
   }
 
+
+  // Export the form to a ConfigOutput object
   Future<ConfigOutput> export() async {
     var output = ConfigOutput();
     await output.initialize();
-    output.setData(_data);
     output.setConfigName(_configName);
+    output.saveConfigScript(buildConfigScript());
     return output;
   }
 }

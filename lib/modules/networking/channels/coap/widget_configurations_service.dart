@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:mosaico_flutter_core/toaster.dart';
 
-import '../../models/widget.dart';
+import '../../models/mosaico_widget.dart';
 import '../../models/widget_configuration.dart';
 import 'base_service.dart';
 

@@ -45,8 +45,15 @@ abstract class MosaicoField extends StatelessWidget
     return _required;
   }
 
-  // This needs to be overridden by inheritors
+  /*
+  * These need to be implemented by the subclasses
+  */
+
+  /// This method should return the widget that represents the field
   Widget buildField(BuildContext context, DynamicFormState state);
+
+  /// This method should return the script code to run before the widget script is loaded onto the matrix
+  String getScriptCode();
 
   @override
   Widget build(BuildContext context) {

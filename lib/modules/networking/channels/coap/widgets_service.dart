@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:mosaico_flutter_core/toaster.dart';
-
-import '../../models/widget.dart';
+import '../../models/mosaico_widget.dart';
 import 'base_service.dart';
 
 class WidgetsService {
@@ -14,12 +13,16 @@ class WidgetsService {
   static const String _installedUri = _baseUri + '/installed';
 
   static Future<void> installWidget(int id) async {
-    await BaseService.post(_installedUri, '{"widget_store_id": $id}');
+    await BaseService.post(_installedUri + '/widget_store_id=$id', '');
   }
 
-  static Future<List<Widget>> getInstalledWidgets() async {
-    final data = await BaseService.get(_installedUri);
-    return List<Widget>.from(data.map((widget) => Widget.fromJson(widget)));
+  static Future<List<MosaicoWidget>> getInstalledWidgets() async {
+    final data = await BaseService.get(_installedUri + '/');
+    return List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
+  }
+
+  static Future<void> uninstallWidget(int id) async {
+    await BaseService.delete(_installedUri + '/widget_id=$id');
   }
 
   /**

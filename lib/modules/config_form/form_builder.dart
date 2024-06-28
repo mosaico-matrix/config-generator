@@ -9,7 +9,7 @@ class FormModelBuilder {
   DynamicFormState _formModel = DynamicFormState();
 
 
-  /// Adds the common attributes to a generic mosaico componet
+  /// Adds the common attributes to a generic mosaico component
   void _addComponentAttributes(MosaicoField component, Map<String, dynamic> attributes) {
     component.setLabel(attributes['label']);
     component.setPlaceholder(attributes['placeholder']);

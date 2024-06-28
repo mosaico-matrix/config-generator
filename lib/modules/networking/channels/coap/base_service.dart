@@ -4,6 +4,7 @@ import 'package:coap/coap.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:mosaico_flutter_core/configuration/configs.dart';
 import 'package:mosaico_flutter_core/toaster.dart';
 
 import '../../../../exceptions/coap_exception.dart';
@@ -19,13 +20,19 @@ class BaseService {
   static final _client = CoapClient(
     Uri(
       scheme: 'coap',
-      host: '198.19.249.145', //ubuntu.orb.local,10.0.2.2
+      host: Configs.debugMatrixIp,
       port: 5683,
     ),
     config: CoapConfig(),
   );
 
   static Future<dynamic> _processResponse(CoapResponse response) async {
+
+    // // Throw if not success
+    // if (response.statusCodeString == '4.04') {
+    //   Toaster.error('COAP response error: ${response.code}');
+    // }
+
     final decodedResponse = json.decode(response.payloadString);
     logger.d(decodedResponse);
     final message = decodedResponse['message'];
@@ -43,6 +50,7 @@ class BaseService {
       final response = await _client.get(Uri(path: path));
       return _processResponse(response);
     } catch (e) {
+      logger.e(e);
       throw CoapException();
     }
   }
@@ -55,6 +63,7 @@ class BaseService {
       final response = await _client.delete(Uri(path: path));
       return _processResponse(response);
     } catch (e) {
+      logger.e(e);
       throw CoapException();
     }
   }
@@ -69,6 +78,7 @@ class BaseService {
           payload: payload, options: options);
       return _processResponse(response);
     } catch (e) {
+      logger.e(e);
       throw CoapException();
     }
   }
@@ -83,6 +93,7 @@ class BaseService {
           payload: payload, options: options);
       return _processResponse(response);
     } catch (e) {
+      logger.e(e);
       throw CoapException();
     }
   }

@@ -40,21 +40,9 @@ class ConfigOutput {
   /**
    * Save files to disk in temp folder as they are provided
    */
-  void setData(Map<String, dynamic> data) {
-    File('$_dataOutputPath/data.json').writeAsStringSync(jsonEncode(data));
+  void saveConfigScript(String script) {
+    File('$_dataOutputPath/config.chai').writeAsStringSync(script);
   }
-
-  Map<String, dynamic> getData() {
-    return jsonDecode(File('$_dataOutputPath/data.json').readAsStringSync());
-  }
-
-  void addImage(String name, File image) {
-    image.copySync('$_dataOutputPath/$name.ppm');
-  }
-
-  void addAnimation(File animation) {
-  }
-
 
   /**
    * Export everything
