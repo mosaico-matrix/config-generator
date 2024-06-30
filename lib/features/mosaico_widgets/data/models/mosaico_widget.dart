@@ -1,4 +1,4 @@
-import 'package:mosaico_flutter_core/modules/networking/models/serializable.dart';
+import '../../../../core/models/serializable.dart';
 
 class MosaicoWidget implements Serializable {
   final int id;

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
+/// This class is used to show toast without context for messages/errors
 class Toaster {
   static void show(String message, Color color, IconData icon) {
     toastification.show(
