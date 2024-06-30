@@ -1,18 +1,18 @@
 import 'package:mosaico_flutter_core/modules/networking/models/serializable.dart';
 
-class Widget implements Serializable {
+class MosaicoWidget implements Serializable {
   final int id;
   final String name;
   final String author;
 
-  Widget({
+  MosaicoWidget({
     required this.id,
     required this.name,
     required this.author,
   });
 
-  factory Widget.fromJson(Map<String, dynamic> json) {
-    return Widget(
+  factory MosaicoWidget.fromJson(Map<String, dynamic> json) {
+    return MosaicoWidget(
       id: json['id'],
       name: json['name'],
       author: json['author'],
