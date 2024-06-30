@@ -1,5 +1,5 @@
 import 'package:logger/logger.dart';
-import 'package:mosaico_flutter_core/toaster.dart';
+import 'package:mosaico_flutter_core/core/utils/toaster.dart';
 import 'coap_exception.dart';
 
 // Logger

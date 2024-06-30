@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:mosaico_flutter_core/toaster.dart';
+import 'package:mosaico_flutter_core/core/utils/toaster.dart';
 
 import '../../models/widget.dart';
 import 'base_service.dart';

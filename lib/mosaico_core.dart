@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'configuration/app_color_scheme.dart';
-
 class MosaicoCore extends StatelessWidget {
 
   final Widget child;

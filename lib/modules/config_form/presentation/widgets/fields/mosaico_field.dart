@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mosaico_flutter_core/modules/config_form/states/dynamic_form_state.dart';
 import 'package:provider/provider.dart';
+
+import '../../states/dynamic_form_state.dart';
 
 abstract class MosaicoField extends StatelessWidget
 {

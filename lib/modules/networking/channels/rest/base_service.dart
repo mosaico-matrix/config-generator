@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import '../../../../configuration/configs.dart';
-import '../../../../exceptions/api_exception.dart';
+import '../../../../core/configuration/configs.dart';
+import '../../../../core/exceptions/api_exception.dart';
 import '../../models/serializable.dart';
 
 

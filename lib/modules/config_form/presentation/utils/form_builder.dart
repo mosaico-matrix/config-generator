@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:mosaico_flutter_core/modules/config_form/states/dynamic_form_state.dart';
-import 'fields/mosaico_field.dart';
-import 'fields/mosaico_string_field.dart';
+import '../states/dynamic_form_state.dart';
+import '../widgets/fields/mosaico_field.dart';
+import '../widgets/fields/mosaico_string_field.dart';
 
 class FormModelBuilder {
 

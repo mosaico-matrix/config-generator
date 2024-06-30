@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:mosaico_flutter_core/toaster.dart';
+import 'package:mosaico_flutter_core/core/utils/toaster.dart';
 
 import '../../models/widget.dart';
 import '../../models/widget_configuration.dart';

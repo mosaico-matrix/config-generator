@@ -4,9 +4,9 @@ import 'package:coap/coap.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:mosaico_flutter_core/toaster.dart';
+import 'package:mosaico_flutter_core/core/utils/toaster.dart';
+import '../../../../core/exceptions/coap_exception.dart';
 
-import '../../../../exceptions/coap_exception.dart';
 
 // Base CoAP client class
 class BaseService {

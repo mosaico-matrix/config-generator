@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mosaico_flutter_core/modules/config_form/states/dynamic_form_state.dart';
-
+import '../../states/dynamic_form_state.dart';
 import 'mosaico_field.dart';
 
 class MosaicoStringField extends MosaicoField {

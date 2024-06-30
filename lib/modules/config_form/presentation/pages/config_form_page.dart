@@ -3,14 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mosaico_flutter_core/mosaico_core.dart';
-import 'package:mosaico_flutter_core/widgets/dialogs/text_input_dialog.dart';
-import 'package:mosaico_flutter_core/widgets/mobile_size.dart';
 import 'package:provider/provider.dart';
-
-import '../components/dynamic_form.dart';
-import '../models/config_output.dart';
-import '../form_builder.dart';
+import '../../../../common/widgets/dialogs/text_input_dialog.dart';
+import '../../../../common/widgets/mobile_size.dart';
 import '../states/dynamic_form_state.dart';
+import '../utils/form_builder.dart';
+import '../widgets/dynamic_form.dart';
 
 /**
  * This is the main page of the configuration generator
@@ -18,11 +16,11 @@ import '../states/dynamic_form_state.dart';
  * It will create the dynamic_form component where the fields are going to be displayed
  * It will create the button to generate the configuration, close the page and return the result
  */
-class ConfigGenerator extends StatelessWidget {
+class ConfigFormPage extends StatelessWidget {
 
   final Map<String, dynamic> _configForm;
   final String? initialConfigName;
-  ConfigGenerator(this._configForm, {Key? key, this.initialConfigName}) : super(key: key);
+  ConfigFormPage(this._configForm, {Key? key, this.initialConfigName}) : super(key: key);
 
 
 

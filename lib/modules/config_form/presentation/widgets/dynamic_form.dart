@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mosaico_flutter_core/modules/config_form/fields/mosaico_field.dart';
 import 'package:provider/provider.dart';
-
 import '../states/dynamic_form_state.dart';
+import 'fields/mosaico_field.dart';
 
 /**
  * This widget is used to display a dynamic form based on the user's configuration

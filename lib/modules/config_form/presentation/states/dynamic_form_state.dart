@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mosaico_flutter_core/modules/config_form/models/config_output.dart';
-import '../fields/mosaico_field.dart';
+
+import '../../data/models/config_output.dart';
+import '../widgets/fields/mosaico_field.dart';
+
 
 /// This class represents the state of the dynamic form.
 class DynamicFormState extends ChangeNotifier {
