@@ -9,7 +9,6 @@ import '../../../configuration/configs.dart';
 import '../../../exceptions/coap_exception.dart';
 import '../../../utils/toaster.dart';
 
-
 // Base CoAP client class
 class CoapService {
 
@@ -18,17 +17,25 @@ class CoapService {
     printer: PrettyPrinter(),
   );
 
-  static final _client = CoapClient(
-    Uri(
-      scheme: 'coap',
-      host: Configs.debugMatrixIp,
-      port: 5683,
-    ),
-    config: CoapConfig(),
-  );
+  static CoapClient _client = _initClient(Configs.debugMatrixIp);
+
+  /// Re-creates the client with the new IP
+  static void setMatrixIp(String ip) {
+    _client = _initClient(ip);
+  }
+  static CoapClient _initClient(String ip)
+  {
+    return _client = CoapClient(
+      Uri(
+        scheme: 'coap',
+        host: ip,
+        port: 5683,
+      ),
+      config: CoapConfig(),
+    );
+  }
 
   static Future<dynamic> _processResponse(CoapResponse response) async {
-
     // Decode from json
     final decodedResponse = json.decode(response.payloadString);
     logger.d(decodedResponse);
@@ -57,7 +64,6 @@ class CoapService {
   }
 
   static Future<dynamic> delete(String path) async {
-
     logger.d("DELETE: $path");
 
     try {
@@ -71,7 +77,6 @@ class CoapService {
 
   static Future<dynamic> post(String path, String payload,
       [List<Option<Object>>? options]) async {
-
     logger.d("POST: $path");
 
     try {
@@ -86,7 +91,6 @@ class CoapService {
 
   static Future<dynamic> put(String path, String payload,
       [List<Option<Object>>? options]) async {
-
     logger.d("PUT: $path");
 
     try {
@@ -98,8 +102,4 @@ class CoapService {
       throw CoapException();
     }
   }
-
-
 }
-
-

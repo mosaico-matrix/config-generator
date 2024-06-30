@@ -31,7 +31,7 @@ class MosaicoWidgetsRepositoryImpl implements MosaicoWidgetsRepository {
 
   @override
   Future<List<MosaicoWidget>> getInstalledWidgets() async {
-    final data = await CoapService.get(_baseUri + '/installed');
+    final data = await CoapService.get(_baseUri + '/installed/');
     return List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
   }
 
