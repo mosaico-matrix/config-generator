@@ -3,7 +3,7 @@ import '../states/dynamic_form_state.dart';
 import '../widgets/fields/mosaico_field.dart';
 import '../widgets/fields/mosaico_string_field.dart';
 
-class FormModelBuilder {
+class DynamicFormStateBuilder {
 
   /// The form that is being built
   DynamicFormState _formModel = DynamicFormState();
@@ -16,7 +16,7 @@ class FormModelBuilder {
     component.setRequired(attributes['required']);
   }
 
-  FormModelBuilder(Map<String, dynamic> configForm) {
+  DynamicFormStateBuilder(Map<String, dynamic> configForm) {
 
     // Get the main form
     var form = configForm['form'];
