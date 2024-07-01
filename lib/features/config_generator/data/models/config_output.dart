@@ -1,9 +1,14 @@
 import 'dart:io';
 import 'package:archive/archive_io.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
 class ConfigOutput {
+
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
 
   late final String _tempPath;
   late final String _dataOutputPath;
@@ -78,6 +83,7 @@ class ConfigOutput {
     // Optionally delete the intermediate tar file
     tarFile.deleteSync();
 
+    logger.d('Exported config to: ${outputFile.path}');
     return outputFile.path;
   }
 

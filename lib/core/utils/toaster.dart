@@ -1,15 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:toastification/toastification.dart';
 
 /// This class is used to show toast without context for messages/errors
 class Toaster {
+
+
+  /*
+  * Modify global config
+  */
+  static Alignment _alignment = Alignment.topRight;
+  static void setAlignment(Alignment alignment) {
+    _alignment = alignment;
+  }
+
   static void show(String message, Color color, IconData icon) {
     toastification.show(
       title: Text(message),
       description: null,
       style: ToastificationStyle.flat,
       icon: Icon(icon),
+      alignment: _alignment,
       primaryColor: color,
       showProgressBar: false,
       //applyBlurEffect: true,

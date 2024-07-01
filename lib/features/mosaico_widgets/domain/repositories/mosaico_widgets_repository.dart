@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../data/models/mosaico_widget.dart';
 
 abstract class MosaicoWidgetsRepository {
@@ -22,4 +24,7 @@ abstract class MosaicoWidgetsRepository {
 
   /// Get the configuration form for a widget, used to create a new widget configuration
   Future<Map<String, dynamic>> getWidgetConfigurationForm({required int widgetId});
+
+  /// Install a locally developed widget and returns the result
+  Future<MosaicoWidget> installDevelopedWidget({required String projectName, required String archivePath});
 }

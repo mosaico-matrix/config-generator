@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:mosaico_flutter_core/core/networking/services/coap/coap_service.dart';
 
@@ -31,18 +32,29 @@ class MosaicoWidgetsRepositoryImpl implements MosaicoWidgetsRepository {
 
   @override
   Future<List<MosaicoWidget>> getInstalledWidgets() async {
-    final data = await CoapService.get(_baseUri + '/installed/');
+    final data = await CoapService.get(_baseUri + '/installed/'); // note the trailing slash, coap returns 404 otherwise
     return List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
   }
 
   @override
   Future<void> previewWidget({required int widgetId, int? configurationId}) async {
     await CoapService.post(
-        _baseUri + '/active', '{"widget_id": $widgetId, "config_id": $configurationId ?? 0}');
+        _baseUri + '/active', '{"widget_id": $widgetId, "config_id": $configurationId}');
   }
 
   @override
   Future<Map<String, dynamic>> getWidgetConfigurationForm({required int widgetId}) async {
     return await CoapService.get(_baseUri + '/configuration_form/widget_id=$widgetId');
+  }
+
+  @override
+  Future<MosaicoWidget> installDevelopedWidget({required String projectName, required String archivePath}) async {
+
+    final file = File(archivePath);
+    final fileBase64 = base64Encode(await file.readAsBytes());
+
+    // Send the configuration to the matrix
+    final data = await CoapService.post(_baseUri + '/developed', '$projectName,$fileBase64');
+    return MosaicoWidget.fromJson(data);
   }
 }

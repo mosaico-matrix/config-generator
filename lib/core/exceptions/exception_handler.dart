@@ -13,5 +13,7 @@ void handleException(Object error, StackTrace stackTrace)
     case CoapException:
       Toaster.error(error.toString());
       break;
+      default:
+        logger.e("Unhandled exception: $error $stackTrace");
   }
 }
