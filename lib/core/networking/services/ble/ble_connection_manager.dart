@@ -6,7 +6,7 @@ import 'package:mosaico_flutter_core/core/utils/toaster.dart';
 class BLEConnectionManager {
 
   static const String SERVICE_NAME = "PixelForge"; // Friendly name of the matrix
-  static Guid MATRIX_WELCOME_SERVICE_UUID = Guid("d34fdcd0-83dd-4abe-9c16-1230e89ad2f2"); // Service UUID to look for
+  static Guid MOSAICO_SERVICE_UUID = Guid("d34fdcd0-83dd-4abe-9c16-1230e89ad2f2"); // Service UUID to look for
   static BluetoothDevice? _connectedMatrix;
 
   static final logger = Logger(
@@ -54,7 +54,7 @@ class BLEConnectionManager {
       logger.d("Device is offering service: ${service.uuid}");
 
       // Search for the service we are interested in
-      if (service.uuid == MATRIX_WELCOME_SERVICE_UUID) {
+      if (service.uuid == MOSAICO_SERVICE_UUID) {
 
         logger.d("Found the service we are looking for, hello matrix!");
 
@@ -95,8 +95,20 @@ class BLEConnectionManager {
     }
   }
 
-  static BluetoothDevice getConnectedMatrix() {
+  static BluetoothDevice getConnectedMatrixBleDevice() {
     return _connectedMatrix == null ? throw Exception("Matrix is not connected") : _connectedMatrix!;
+  }
+
+  static BluetoothService getService() {
+    // Get requested service
+    for (var service
+    in BLEConnectionManager.getConnectedMatrixBleDevice().servicesList) {
+      if (service.uuid.str128 == MOSAICO_SERVICE_UUID.toString()) {
+        return service;
+      }
+    }
+
+    throw Exception("Service not found");
   }
 
   // Start scanning for the matrix and connect to it if found
@@ -131,7 +143,7 @@ class BLEConnectionManager {
     // Start scanning w/ timeout
     await FlutterBluePlus.startScan(
         //withNames: [SERVICE_NAME],
-        withServices: [MATRIX_WELCOME_SERVICE_UUID],
+        withServices: [MOSAICO_SERVICE_UUID],
         timeout: const Duration(seconds: 15));
 
     // Wait for scan until end
