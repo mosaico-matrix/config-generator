@@ -15,7 +15,7 @@ class BLEConnectionManager {
 
   static void _onMatrixDisconnected(BluetoothConnectionState state) async {
     if (state == BluetoothConnectionState.disconnected) {
-      Toaster.error("Matrix disconnected");
+      //Toaster.error("Matrix disconnected");
       logger.d("Matrix disconnected");
       _connectedMatrix = null;
     }
@@ -23,7 +23,7 @@ class BLEConnectionManager {
 
   static Future<void> _onMatrixConnected(BluetoothDevice device) async
   {
-    Toaster.success("Connected to matrix");
+    //Toaster.success("Connected to matrix");
     logger.d("Matrix found: ${device.advName}");
 
     // Connect to device and stop scanning
