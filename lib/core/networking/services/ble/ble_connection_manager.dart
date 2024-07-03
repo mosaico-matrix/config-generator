@@ -130,7 +130,7 @@ class BLEConnectionManager {
     // Wait for Bluetooth enabled & permission granted
     var bluetoothState = await FlutterBluePlus.adapterState.first;
     if (bluetoothState != BluetoothAdapterState.on) {
-      Toaster.error("Bluetooth is turned off");
+      //Toaster.error("Bluetooth is turned off");
       return;
     }
 

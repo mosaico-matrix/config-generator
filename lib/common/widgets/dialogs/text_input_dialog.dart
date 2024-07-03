@@ -1,18 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TextInputDialog {
   static Future<void> show(BuildContext context, String heading, Function(String) onTextEntered) async {
     String enteredText = '';
 
-    final result = await showCupertinoDialog<bool>(
+    final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
+        return AlertDialog(
           title: Text(heading),
           content: Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: CupertinoTextField(
+            child: TextField(
               onChanged: (value) {
                 enteredText = value;
               },
@@ -23,14 +22,14 @@ class TextInputDialog {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child:  Text('Cancel', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child:  Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 // Set the result to true to indicate that the user confirmed
                 Navigator.of(context).pop(true);
               },
-              child:  Text('OK', style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
+              child:  Text('OK'),
             ),
           ],
         );

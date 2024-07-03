@@ -12,7 +12,7 @@ class RestService {
     printer: PrettyPrinter(),
   );
 
-  static const String baseUrl = Configs.apiUrl;
+  static String baseUrl = Configs.apiUrl;
   static const int timeoutSec = 5;
 
   // Get headers and take the token from the shared preferences

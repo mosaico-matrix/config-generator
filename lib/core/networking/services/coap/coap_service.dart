@@ -43,7 +43,7 @@ class CoapService {
     // Check if need to display a message
     final message = decodedResponse['message'];
     if (message != null && message.isNotEmpty) {
-      response.isSuccess ? Toaster.success(message) : Toaster.error(message);
+      response.isSuccess ? Toaster.success(message) : throw CoapException(message: message);
     }
 
     // Return final data
