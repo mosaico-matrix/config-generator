@@ -8,7 +8,7 @@ abstract class MosaicoWidgetsRepository {
   /// [search]: search string to filter widgets
   /// [category]: category to filter widgets
   /// [page]: page number to get
-  Future<List<MosaicoWidget>> getWidgets({String? search, String? category, int page = 1});
+  Future<List<MosaicoWidget>> getStoreWidgets({String? search, String? category, int page = 1});
 
   /// Install a widget from the app store
   Future<void> installWidget({required int storeId});
@@ -20,7 +20,7 @@ abstract class MosaicoWidgetsRepository {
   Future<List<MosaicoWidget>> getInstalledWidgets();
 
   /// Set a widget as active on the matrix
-  Future<void> previewWidget({required int widgetId, int configurationId});
+  Future<void> previewWidget({required int widgetId, int? configurationId});
 
   /// Get the configuration form for a widget, used to create a new widget configuration
   Future<Map<String, dynamic>> getWidgetConfigurationForm({required int widgetId});

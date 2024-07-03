@@ -58,7 +58,6 @@ class CoapService {
       final response = await _client.get(Uri(path: path));
       return _processResponse(response);
     } catch (e) {
-      logger.e(e);
       throw CoapException();
     }
   }
@@ -70,7 +69,6 @@ class CoapService {
       final response = await _client.delete(Uri(path: path));
       return _processResponse(response);
     } catch (e) {
-      logger.e(e);
       throw CoapException();
     }
   }
@@ -84,7 +82,6 @@ class CoapService {
           payload: payload, options: options);
       return _processResponse(response);
     } catch (e) {
-      logger.e(e);
       throw CoapException();
     }
   }
@@ -98,7 +95,6 @@ class CoapService {
           payload: payload, options: options);
       return _processResponse(response);
     } catch (e) {
-      logger.e(e);
       throw CoapException();
     }
   }
