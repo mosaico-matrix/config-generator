@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mosaico_flutter_core/core/configuration/configs.dart';
 import 'package:mosaico_flutter_core/features/matrix_control/domain/usecases/matrix_ble_service.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaico_widget_configuration.dart';
@@ -11,6 +14,10 @@ import '../../../mosaico_widgets/data/models/mosaico_widget.dart';
 import '../../../mosaico_widgets/data/repositories/mosaico_widgets_repository_impl.dart';
 
 class MosaicoDeviceState with ChangeNotifier {
+
+  /// Logger
+  final logger = Logger(printer: PrettyPrinter());
+
   /// Repository
   MosaicoWidgetsRepository widgetsRepository = MosaicoWidgetsRepositoryImpl();
 
@@ -42,6 +49,17 @@ class MosaicoDeviceState with ChangeNotifier {
 
   Future connect() async {
     if (_isCoapConnected != null) return;
+    logger.i('Checking connection status');
+
+    // Ping matrix again in x seconds
+    // TODO: view gh issue to improve this in future
+    Timer.periodic(Duration(seconds: 30), (timer) async {
+      _resetConnectionStatus();
+      timer.cancel();
+      connect();
+    });
+
+
     _isCoapConnected = false;
     _isBleConnected = false;
     _isConnecting = true;
@@ -98,5 +116,10 @@ class MosaicoDeviceState with ChangeNotifier {
 
   Future<bool> _pingMatrix(String matrixIp) async {
     return false;
+  }
+
+  void _resetConnectionStatus() {
+    _isCoapConnected = null;
+    _isBleConnected = null;
   }
 }

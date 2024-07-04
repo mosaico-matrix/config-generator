@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../common/widgets/led_matrix.dart';
+import '../../../../common/widgets/matrices/loading_matrix.dart';
 
 class MosaicoLoadingIndicatorSmall extends StatelessWidget {
 
@@ -8,11 +7,8 @@ class MosaicoLoadingIndicatorSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LedMatrix(
-      n: 4,
-      ledHeight: 5,
-      ledSpacing: 1,
-      repeatAnimationEvery: 100,
+    return LoadingMatrix(
+      n: 5,
     );
   }
 }

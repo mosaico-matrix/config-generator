@@ -1,21 +1,34 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationDialog {
   static void _doNothing() {}
 
-  static void show(BuildContext context, String title,
-      String message, VoidCallback onConfirm,
-      {VoidCallback onCancel = _doNothing}) {
-    showDialog(
+  static Future<bool> ask({
+    required BuildContext context,
+    required String title,
+    required String message,
+  }) async {
+    return await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return CupertinoAlertDialog(
+          return AlertDialog(
             title: Text(title),
             content: Text(message),
             actions: [
-              TextButton(onPressed: ()=> {Navigator.of(context).pop(true), onCancel()}, child: const Text("Annulla")),
-              TextButton(onPressed: ()=> {Navigator.of(context).pop(true), onConfirm()}, child: const Text("Ok")),
+
+              // Cancel button
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text("Cancel",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.error))),
+
+              // Ok button
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text("Ok",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary))),
             ],
           );
         });

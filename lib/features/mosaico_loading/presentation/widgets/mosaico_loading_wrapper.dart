@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosaico_flutter_core/features/mosaico_loading/presentation/widgets/mosaico_loading_indicator.dart';
 import 'package:provider/provider.dart';
-import '../../../../common/widgets/led_matrix.dart';
+import '../../../../common/widgets/matrices/led_matrix.dart';
 import '../states/mosaico_loading_state.dart';
 
 class MosaicoLoadingWrapper extends StatelessWidget {

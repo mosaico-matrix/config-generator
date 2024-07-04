@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import '../../../../core/models/serializable.dart';
+import 'mosaico_widget_metadata.dart';
 
 class MosaicoWidget implements Serializable {
   final int id;
@@ -7,6 +10,7 @@ class MosaicoWidget implements Serializable {
   final String author;
   final String description;
   bool installed = false;
+  MosaicoWidgetMetadata? metadata;
 
   MosaicoWidget({
     required this.id,
@@ -14,6 +18,7 @@ class MosaicoWidget implements Serializable {
     required this.name,
     required this.author,
     required this.description,
+    this.metadata,
   });
 
   /// This is used when deserializing COAP responses
@@ -23,7 +28,8 @@ class MosaicoWidget implements Serializable {
       storeId: json['store_id'],
       name: json['name'],
       author: json['author'],
-      description: ''
+      description: '',
+      metadata: MosaicoWidgetMetadata.fromJson(jsonDecode(json['metadata'])),
     );
   }
 

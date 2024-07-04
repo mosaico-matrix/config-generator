@@ -6,13 +6,13 @@ class AppColorScheme {
 
       // Main colors
       primary: Color(0xFFFFFFFF),
-      secondary: Color(0xFF0320DA),
+      secondary: Color(0xFF820EEF),
 
       // Background color
       surface: Color(0xFF1C1C1C),
 
       // Error stuff
-      error: Color(0xFFB00020),
+      error: Color(0xFFF66121),
 
       // Inverse of primary
       onPrimary: Colors.black,

@@ -7,14 +7,15 @@ import '../../domain/repositories/mosaico_widget_configurations_repository.dart'
 class MosaicoWidgetConfigurationsRepositoryImpl implements MosaicoWidgetConfigurationsRepository {
 
   @override
-  Future<void> uploadWidgetConfiguration({required int widgetId, required String configurationName, required String configurationArchivePath}) async {
+  Future<MosaicoWidgetConfiguration> uploadWidgetConfiguration({required int widgetId, required String configurationName, required String configurationArchivePath}) async {
 
     // Convert the configuration file to base64
     final file = File(configurationArchivePath);
     final fileBase64 = base64Encode(await file.readAsBytes());
 
     // Send the configuration to the matrix
-    await CoapService.post('/widget_configurations/widget_id=$widgetId', '$configurationName,$fileBase64');
+    var result = await CoapService.post('/widget_configurations/widget_id=$widgetId', '$configurationName,$fileBase64');
+    return MosaicoWidgetConfiguration.fromJson(result);
   }
 
   @override
