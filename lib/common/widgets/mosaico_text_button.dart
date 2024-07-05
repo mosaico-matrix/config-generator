@@ -5,14 +5,15 @@ class MosaicoTextButton extends StatelessWidget {
 
   final String text;
   final Function onPressed;
-  const MosaicoTextButton({super.key, required this.onPressed, required this.text});
+  bool invertColor = false;
+  MosaicoTextButton({super.key, required this.onPressed, required this.text, this.invertColor = false});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => onPressed(),
       child: Text(text,
-          style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+          style: TextStyle(color: invertColor ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.primary)),
     );
   }
 }

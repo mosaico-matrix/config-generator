@@ -20,6 +20,12 @@ class MosaicoWidgetsRepositoryImpl implements MosaicoWidgetsRepository {
   }
 
   @override
+  Future<MosaicoWidget> getWidgetDetails({required int storeId}) async {
+    final data = await RestService.get('$_baseRestUri/$storeId');
+    return MosaicoWidget.fromStoreJson(data);
+  }
+
+  @override
   Future<void> installWidget({required int storeId}) async {
     await CoapService.post(_baseCoapUri + '/installed/widget_store_id=$storeId', '');
   }
@@ -39,6 +45,11 @@ class MosaicoWidgetsRepositoryImpl implements MosaicoWidgetsRepository {
   Future<void> previewWidget({required int widgetId, int? configurationId}) async {
     await CoapService.post(
         _baseCoapUri + '/active', '{"widget_id": $widgetId, "config_id": $configurationId}');
+  }
+
+  @override
+  Future<void> unsetActiveWidget() async {
+    await CoapService.delete(_baseCoapUri + '/active'); // note the trailing slash, coap returns 404 otherwise
   }
 
   @override
@@ -64,4 +75,6 @@ class MosaicoWidgetsRepositoryImpl implements MosaicoWidgetsRepository {
     final data = await CoapService.post(_baseCoapUri + '/developed', '$projectName,$fileBase64');
     return MosaicoWidget.fromJson(data);
   }
+
+
 }

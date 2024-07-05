@@ -4,18 +4,16 @@ class MosaicoWidgetMetadata implements Serializable {
   MosaicoWidgetMetadata({
     required this.name,
     required this.description,
-    required this.version,
+    required this.widgetVersion,
     required this.softwareVersion,
-    required this.author,
     required this.fps,
     required this.configurable,
   });
 
   final String name;
   final String description;
-  final String version;
+  final String widgetVersion;
   final String softwareVersion;
-  final String author;
   final int fps;
   final bool configurable;
 
@@ -23,9 +21,8 @@ class MosaicoWidgetMetadata implements Serializable {
     return MosaicoWidgetMetadata(
         name: json['name'],
         description: json['description'],
-        version: json['version'],
+        widgetVersion: json['widget_version'],
         softwareVersion: json['software_version'],
-        author: json['author'],
         fps: json['fps'],
         configurable: json['configurable']);
   }

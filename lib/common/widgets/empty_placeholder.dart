@@ -14,7 +14,7 @@ class EmptyPlaceholder extends StatelessWidget {
         children: [
           NoDataMatrix(),
           const SizedBox(height: 20),
-          Text('No data available',
+          Text('No data',
               style: TextStyle(fontSize: 20),
               ),
         ],

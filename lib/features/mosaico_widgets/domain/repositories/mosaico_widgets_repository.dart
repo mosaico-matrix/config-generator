@@ -11,6 +11,10 @@ abstract class MosaicoWidgetsRepository {
   /// [page]: page number to get
   Future<List<MosaicoWidget>> getStoreWidgets({String? search, String? category, int page = 1});
 
+  /// Get widget details from the app store
+  /// [storeId]: the id of the widget in the app store
+  Future<MosaicoWidget> getWidgetDetails({required int storeId});
+
   /// Install a widget from the app store
   Future<void> installWidget({required int storeId});
 
@@ -22,6 +26,9 @@ abstract class MosaicoWidgetsRepository {
 
   /// Set a widget as active on the matrix
   Future<void> previewWidget({required int widgetId, int? configurationId});
+
+  /// Unset the active widget on the matrix
+  Future<void> unsetActiveWidget();
 
   /// Get the active widget on the matrix
   Future<(MosaicoWidget?, MosaicoWidgetConfiguration?)> getActiveWidget();

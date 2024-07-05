@@ -44,8 +44,25 @@ class MosaicoDeviceState with ChangeNotifier {
 
   /// Device info
   MosaicoWidget? _activeWidget;
+  bool get hasActiveWidget => _activeWidget != null;
+  String get activeWidgetName => _activeWidget?.name ?? 'n/a';
   MosaicoWidgetConfiguration? _activeWidgetConfiguration;
+  String get activeWidgetConfigurationName =>
+      _activeWidgetConfiguration?.name ?? 'n/a';
   String? _matrixIp;
+
+
+  Future<void> stopActiveWidget() async {
+    if (!hasActiveWidget) {
+      Toaster.warning('There is no active widget to stop');
+      return;
+    }
+
+    await widgetsRepository.unsetActiveWidget();
+    _activeWidget = null;
+    _activeWidgetConfiguration = null;
+    notifyListeners();
+  }
 
   Future connect() async {
     if (_isCoapConnected != null) return;

@@ -97,6 +97,7 @@ class RestService {
 
     // Success
     if (message != null && message.isNotEmpty) Toaster.success(message);
+    Logger().d("Response: $data");
     return data['data'];
   }
 }
