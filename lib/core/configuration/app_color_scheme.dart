@@ -9,7 +9,7 @@ class AppColorScheme {
       secondary: Color(0xFF820EEF),
 
       // Background color
-      surface: Color(0xFF1C1C1C),
+      surface: Color(0xFF121212),
 
       // Error stuff
       error: Color(0xFFF66121),
