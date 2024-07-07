@@ -7,12 +7,14 @@ import 'led_matrix.dart';
 class LoadingMatrix extends StatelessWidget {
 
   final int n;
-  LoadingMatrix({super.key, this.n = 10});
+  final int ledHeight;
+  LoadingMatrix({super.key, this.n = 10, this.ledHeight = 10});
 
   @override
   Widget build(BuildContext context) {
     return LedMatrix(
       n: n,
+      ledHeight: ledHeight,
       onCreate: (ledMatrix, defaultLedColor) {
         for (int i = 0; i < ledMatrix.length; i++) {
           for (int j = 0; j < ledMatrix[i].length; j++) {

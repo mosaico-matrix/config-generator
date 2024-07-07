@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TextInputDialog {
-  static Future<void> show(BuildContext context, String heading, Function(String) onTextEntered) async {
-    String enteredText = '';
-
-    final result = await showDialog(
+  static String enteredText = "";
+  static Future<String?> show(BuildContext context, String heading) async {
+    return await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(heading),
+          title: Text(heading, style: TextStyle(color: Theme.of(context).primaryColor)),
           content: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: TextField(
@@ -20,14 +19,14 @@ class TextInputDialog {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false);
+                Navigator.of(context).pop();
               },
               child:  Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 // Set the result to true to indicate that the user confirmed
-                Navigator.of(context).pop(true);
+                Navigator.of(context).pop(enteredText);
               },
               child:  Text('OK'),
             ),
@@ -35,10 +34,5 @@ class TextInputDialog {
         );
       },
     );
-
-    // Check the result after the dialog has been dismissed
-    if (result == true) {
-      onTextEntered(enteredText);
-    }
   }
 }

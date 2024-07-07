@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mosaico_flutter_core/common/widgets/renamable_app_bar.dart';
 import 'package:provider/provider.dart';
 import '../../../../common/widgets/dialogs/text_input_dialog.dart';
 import '../../../../common/widgets/mobile_size.dart';
@@ -29,30 +30,20 @@ class ConfigFormPage extends StatelessWidget {
     var formModel = DynamicFormStateBuilder(_configForm).buildFormModel();
     formModel.setConfigName(initialConfigName ?? "");
 
-    // Trigger config name change after whole widget has been built
-    if (initialConfigName == null) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        showConfigNameDialog(context, formModel);
-      });
-    }
-
     // Create page
     return MobileSize(
       child: ChangeNotifierProvider(
         create: (context) => formModel,
         child: Builder(builder: (context) {
           return Scaffold(
-            appBar: AppBar(
-              title:
-                  Text(Provider.of<DynamicFormState>(context).getConfigName()),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () async {
-                    showConfigNameDialog(context, formModel);
-                  },
-                ),
-              ],
+            appBar: RenamableAppBar(
+              promptText: "Enter configuration name",
+              askOnLoad: initialConfigName == null,
+              initialTitle: Provider.of<DynamicFormState>(context).getConfigName(),
+              onTitleChanged: (String newName) {
+                Provider.of<DynamicFormState>(context, listen: false)
+                    .setConfigName(newName);
+              },
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
@@ -75,12 +66,5 @@ class ConfigFormPage extends StatelessWidget {
         }),
       ),
     );
-  }
-
-  void showConfigNameDialog(
-      BuildContext context, DynamicFormState formModel) async {
-    await TextInputDialog.show(context, "Configuration name", (String name) {
-      formModel.setConfigName(name);
-    });
   }
 }

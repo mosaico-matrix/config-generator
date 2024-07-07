@@ -4,7 +4,7 @@ import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaic
 import '../../../../core/networking/services/coap/coap_service.dart';
 import '../../domain/repositories/mosaico_widget_configurations_repository.dart';
 
-class MosaicoWidgetConfigurationsRepositoryImpl implements MosaicoWidgetConfigurationsRepository {
+class MosaicoWidgetConfigurationsCoapRepository implements MosaicoWidgetConfigurationsRepository {
 
   @override
   Future<MosaicoWidgetConfiguration> uploadWidgetConfiguration({required int widgetId, required String configurationName, required String configurationArchivePath}) async {

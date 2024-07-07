@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mosaico_flutter_core/features/mosaico_loading/presentation/widgets/mosaico_loading_indicator.dart';
+import 'package:mosaico_flutter_core/common/widgets/matrices/loading_matrix.dart';
 import 'package:provider/provider.dart';
 import '../../../../common/widgets/matrices/led_matrix.dart';
 import '../states/mosaico_loading_state.dart';
@@ -23,7 +23,7 @@ class MosaicoLoadingWrapper extends StatelessWidget {
                 if (state.isOverlayLoading)
                   Container(
                     color: Colors.black.withOpacity(0.5),
-                    child: Center(child: MosaicoLoadingIndicator()),
+                    child: Center(child: LoadingMatrix()),
                   ),
               ],
             ),

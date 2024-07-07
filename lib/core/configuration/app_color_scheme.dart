@@ -6,10 +6,10 @@ class AppColorScheme {
 
       // Main colors
       primary: Color(0xFFFFFFFF),
-      secondary: Color(0xFF820EEF),
+      secondary:   Color(0xFF0E7CC1),
 
       // Background color
-      surface: Color(0xFF121212),
+      surface: Color.fromRGBO(12, 12, 12, 1),
 
       // Error stuff
       error: Color(0xFFF66121),
@@ -21,7 +21,7 @@ class AppColorScheme {
       onSecondary: Colors.white,
 
       // Inverse of surface
-      onSurface: Colors.white,
+      onSurface:   Color(0xFF0E7CC1),
 
       // Inverse of error
       onError: Colors.white,

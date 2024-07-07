@@ -9,7 +9,7 @@ class LedMatrix extends StatefulWidget {
   final int repeatAnimationEvery;
   final Function(List<List<Color>>, Color)? onCreate;
   final Function(List<List<Color>>, Color)? onAnimate;
-  final Color defaultLedColor = Colors.deepPurple;
+  final Color defaultLedColor =  Color(0xFF2399E3);
 
    LedMatrix({
     Key? key,
@@ -75,7 +75,7 @@ class _LedMatrixState extends State<LedMatrix> {
       width: containerWidth,
       height: containerHeight,
       decoration: const BoxDecoration(
-        color: Colors.black,
+        color: Color.fromRGBO(10, 10, 10, 1),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

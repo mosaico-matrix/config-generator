@@ -5,13 +5,12 @@ import 'package:logger/logger.dart';
 import 'package:mosaico_flutter_core/core/configuration/configs.dart';
 import 'package:mosaico_flutter_core/features/matrix_control/domain/usecases/matrix_ble_service.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaico_widget_configuration.dart';
-import 'package:mosaico_flutter_core/features/mosaico_widgets/domain/repositories/mosaico_widgets_repository.dart';
+import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/mosaico_widgets_coap_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/networking/services/ble/ble_connection_manager.dart';
 import '../../../../core/utils/toaster.dart';
 import '../../../mosaico_widgets/data/models/mosaico_widget.dart';
-import '../../../mosaico_widgets/data/repositories/mosaico_widgets_repository_impl.dart';
+import '../../../mosaico_widgets/domain/repositories/mosaico_local_widgets_repository.dart';
 
 class MosaicoDeviceState with ChangeNotifier {
 
@@ -19,7 +18,7 @@ class MosaicoDeviceState with ChangeNotifier {
   final logger = Logger(printer: PrettyPrinter());
 
   /// Repository
-  MosaicoWidgetsRepository widgetsRepository = MosaicoWidgetsRepositoryImpl();
+  MosaicoLocalWidgetsRepository widgetsRepository = MosaicoWidgetsCoapRepository();
 
   /// Connection status
   bool? _isBleConnected; // At first we don't know if BLE is connected
