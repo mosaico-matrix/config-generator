@@ -8,5 +8,9 @@ abstract class MosaicoSlideshowsRepository
   Future<List<MosaicoSlideshow>> getSlideshows();
 
   /// Creates a new slideshow with the given items
-  Future<MosaicoSlideshow> createSlideshow(MosaicoSlideshow slideshow);
+  /// It can also be used to update an existing slideshow when the id is set
+  Future<MosaicoSlideshow> createOrUpdateSlideshow(MosaicoSlideshow slideshow);
+
+  /// Sets the given slideshow as the active slideshow
+  Future<void> setActiveSlideshow(MosaicoSlideshow slideshow);
 }

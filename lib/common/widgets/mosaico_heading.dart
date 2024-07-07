@@ -7,6 +7,6 @@ class MosaicoHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold));
+    return Text(text, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: Colors.white));
   }
 }

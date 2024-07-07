@@ -4,11 +4,10 @@ import 'mosaico_slideshow_item.dart';
 
 class MosaicoSlideshow implements Serializable
 {
-  final id;
+  final int? id;
   String name;
   List<MosaicoSlideshowItem> items;
-
-  MosaicoSlideshow({this.id = -1, this.name = "New slideshow", List<MosaicoSlideshowItem>? items})
+  MosaicoSlideshow({this.id, this.name = "New slideshow", List<MosaicoSlideshowItem>? items})
       : items = items ?? [];
 
   factory MosaicoSlideshow.fromJson(Map<String, dynamic> json)

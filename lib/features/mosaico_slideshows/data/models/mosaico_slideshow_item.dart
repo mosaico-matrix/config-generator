@@ -4,14 +4,14 @@ class MosaicoSlideshowItem implements Serializable
 {
   int id;
   int widgetId;
-  int configId;
+  int? configId;
   int position;
   int secondsDuration;
 
   MosaicoSlideshowItem({
     this.id = -1,
     this.widgetId = -1,
-    this.configId = -1,
+    this.configId,
     this.position= 0,
     this.secondsDuration=30,
   });
@@ -20,10 +20,10 @@ class MosaicoSlideshowItem implements Serializable
   {
     return MosaicoSlideshowItem(
       id: json['id'],
-      widgetId: json['widgetId'],
-      configId: json['configId'],
+      widgetId: json['widget_id'],
+      configId: json['config_id'],
       position: json['position'],
-      secondsDuration: json['secondsDuration']
+      secondsDuration: json['seconds_duration']
     );
   }
 
