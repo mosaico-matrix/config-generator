@@ -22,6 +22,18 @@ class MosaicoWidgetConfigurationsCoapRepository implements MosaicoWidgetConfigur
   }
 
   @override
+  Future<MosaicoWidgetConfiguration> updateWidgetConfiguration({required int configurationId, required String configurationName, required String configurationArchivePath}) async {
+
+      // Convert the configuration file to base64
+      final file = File(configurationArchivePath);
+      final fileBase64 = base64Encode(await file.readAsBytes());
+
+      // Send the configuration to the matrix
+      var result = await CoapService.post('/widget_configurations/configuration_id=$configurationId', '$configurationName,$fileBase64');
+      return MosaicoWidgetConfiguration.fromJson(result);
+  }
+
+  @override
   Future<List<MosaicoWidgetConfiguration>> getWidgetConfigurations({required int widgetId}) async {
     final response = await CoapService.get('/widget_configurations/widget_id=$widgetId');
     return (response as List).map((e) => MosaicoWidgetConfiguration.fromJson(e)).toList();
@@ -60,4 +72,5 @@ class MosaicoWidgetConfigurationsCoapRepository implements MosaicoWidgetConfigur
 
     return folder.path;
   }
+
 }

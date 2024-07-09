@@ -10,6 +10,9 @@ abstract class MosaicoWidgetConfigurationsRepository {
   /// Upload a new widget configuration for a widget
   Future<MosaicoWidgetConfiguration> uploadWidgetConfiguration({required int widgetId, required String configurationName, required String configurationArchivePath});
 
+  /// Updates an existing widget configuration
+  Future<MosaicoWidgetConfiguration> updateWidgetConfiguration({required int configurationId, required String configurationName, required String configurationArchivePath});
+
   /// Delete a widget configuration
   Future<void> deleteWidgetConfiguration({required int configurationId});
 

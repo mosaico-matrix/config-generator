@@ -15,6 +15,17 @@ class MatrixBleService {
     List<int> value = await characteristic.read();
     return String.fromCharCodes(value);
   }
+
+  /// Send network credentials
+  Future<void> sendNetworkCredentials(
+      BluetoothDevice device, String ssid, String password) async {
+    var characteristic = getCharacteristic(
+        device, Configs.mosaicoBLEServiceUUID, WIFI_CREDENTIALS);
+
+    // Make ssid|password string
+    var credentials = "$ssid|$password";
+    await characteristic.write(credentials.codeUnits);
+  }
 }
 
 BluetoothCharacteristic getCharacteristic(BluetoothDevice device,

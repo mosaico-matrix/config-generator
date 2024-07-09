@@ -68,7 +68,9 @@ class MosaicoDeviceState with ChangeNotifier {
 
   void _resetConnectionStatus() {
     _isCoapConnected = null;
-    _isBleConnected = null;
+    if (_isBleConnected == false) {
+      _isBleConnected= null;
+    }
     _isConnecting = null;
     _matrixIp = null;
     notifyListeners();
@@ -83,7 +85,7 @@ class MosaicoDeviceState with ChangeNotifier {
 
     // Ping matrix again in x seconds
     // TODO: view gh issue to improve this in future
-    // Timer.periodic(Duration(seconds: 30), (timer) async {
+    // Timer.periodic(Duration(seconds: 15), (timer) async {
     //   _resetConnectionStatus();
     //   timer.cancel();
     //   connect();
@@ -206,6 +208,12 @@ class MosaicoDeviceState with ChangeNotifier {
   /// Send network credentials to the matrix via BLE and checks if reachability is ok
   Future<void> sendNetworkCredentials(BuildContext context) async
   {
+    // Check if BLE is connected
+    if (!_bleDeviceConnected()) {
+      Toaster.error('BLE is not connected');
+      return;
+    }
+
     // Get WiFi SSID
     String wifiName = '';
 
@@ -228,8 +236,7 @@ class MosaicoDeviceState with ChangeNotifier {
     }
 
     // Send them to matrix
-    //await MatrixBle.
-
+    await _matrixBleService.sendNetworkCredentials(_connectedMatrix!, userWifiName, userWifiPassword);
   }
 
   /// Change matrix ip

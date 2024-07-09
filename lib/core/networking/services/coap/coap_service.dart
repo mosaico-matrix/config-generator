@@ -87,17 +87,18 @@ class CoapService {
     }
   }
 
-  static Future<dynamic> put(String path, String payload,
-      [List<Option<Object>>? options]) async {
-    logger.d("PUT: $path");
-
-    try {
-      final response = await _client.put(Uri(path: path),
-          payload: payload, options: options);
-      return _processResponse(response);
-    } catch (e) {
-      throw CoapException();
-    }
-  }
+  // DONT KNOW WHY THIS MAKES A POST REQUEST
+  // static Future<dynamic> put(String path, String payload,
+  //     [List<Option<Object>>? options]) async {
+  //   logger.d("PUT: $path");
+  //
+  //   try {
+  //     final response = await _client.put(Uri(path: path),
+  //         payload: payload, options: options);
+  //     return _processResponse(response);
+  //   } catch (e) {
+  //     throw CoapException();
+  //   }
+  // }
 
 }

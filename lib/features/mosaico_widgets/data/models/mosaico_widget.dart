@@ -4,6 +4,7 @@ import 'package:mosaico_flutter_core/core/configuration/configs.dart';
 
 import '../../../../core/models/serializable.dart';
 import '../../../../core/models/user.dart';
+import 'mosaico_widget_configuration.dart';
 import 'mosaico_widget_metadata.dart';
 
 class MosaicoWidget implements Serializable {
@@ -18,6 +19,7 @@ class MosaicoWidget implements Serializable {
   final List<String>? images;
   bool installed = false;
   MosaicoWidgetMetadata? metadata;
+  List<MosaicoWidgetConfiguration>? configurations = [];
 
   MosaicoWidget({
     required this.id,
