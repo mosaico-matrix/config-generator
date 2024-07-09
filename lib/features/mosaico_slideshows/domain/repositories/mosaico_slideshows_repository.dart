@@ -12,5 +12,8 @@ abstract class MosaicoSlideshowsRepository
   Future<MosaicoSlideshow> createOrUpdateSlideshow(MosaicoSlideshow slideshow);
 
   /// Sets the given slideshow as the active slideshow
-  Future<void> setActiveSlideshow(MosaicoSlideshow slideshow);
+  Future<void> setActiveSlideshow(int slideshowId);
+
+  /// Deletes the slideshow with the given id
+  Future<void> deleteSlideshow(int slideshowId);
 }

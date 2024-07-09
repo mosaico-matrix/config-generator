@@ -23,6 +23,7 @@ class CoapService {
   static void setMatrixIp(String ip) {
     _client = _initClient(ip);
   }
+
   static CoapClient _initClient(String ip)
   {
     return _client = CoapClient(
@@ -98,4 +99,5 @@ class CoapService {
       throw CoapException();
     }
   }
+
 }

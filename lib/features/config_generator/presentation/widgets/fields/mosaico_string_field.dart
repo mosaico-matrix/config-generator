@@ -10,7 +10,11 @@ class MosaicoStringField extends MosaicoField {
   @override
   Widget buildField(BuildContext context, DynamicFormState formState) {
 
+    // Init value with old data if available
+    _value = formState.getEditValue(getName()) ?? "";
+
     return TextFormField(
+      controller: TextEditingController(text: _value),
       textCapitalization: TextCapitalization.sentences,
       validator: (value) {
         if (value == null || value.isEmpty && isRequired()) {
@@ -31,7 +35,13 @@ class MosaicoStringField extends MosaicoField {
   }
 
   @override
-  String getScriptCode() {
+  String getConfigScriptLine() {
     return 'global ${getName()} = "$_value";';
   }
+
+  @override
+  getConfigScriptData() {
+    return _value;
+  }
+
 }

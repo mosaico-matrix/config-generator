@@ -13,7 +13,7 @@ class ConfirmationDialog {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(title),
-            content: Text(message),
+            content: Text(message, style: TextStyle(color: Theme.of(context).colorScheme.primary)),
             actions: [
 
               // Cancel button

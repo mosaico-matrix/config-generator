@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class TextInputDialog {
   static String enteredText = "";
-  static Future<String?> show(BuildContext context, String heading) async {
+  static Future<String?> show(BuildContext context, String heading, {String initialValue=""}) async {
+    enteredText = initialValue;
     return await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -11,6 +12,7 @@ class TextInputDialog {
           content: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: TextField(
+              controller: TextEditingController(text: initialValue),
               onChanged: (value) {
                 enteredText = value;
               },

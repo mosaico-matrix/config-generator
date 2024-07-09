@@ -54,7 +54,10 @@ abstract class MosaicoField extends StatelessWidget
   Widget buildField(BuildContext context, DynamicFormState state);
 
   /// This method should return the script code to run before the widget script is loaded onto the matrix
-  String getScriptCode();
+  String getConfigScriptLine();
+  
+  /// This method should save the field data to edit it later
+  dynamic getConfigScriptData();
 
   @override
   Widget build(BuildContext context) {

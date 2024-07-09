@@ -17,10 +17,12 @@ import '../widgets/dynamic_form.dart';
  * It will create the button to generate the configuration, close the page and return the result
  */
 class ConfigFormPage extends StatelessWidget {
-  final Map<String, dynamic> _configForm;
-  final String? initialConfigName;
-
-  ConfigFormPage(this._configForm, {Key? key, this.initialConfigName})
+  final Map<String, dynamic> _configForm; // Deserialized from config-form.json
+  final String? oldConfigDirPath; // Path to the old config directory
+  final String?
+      initialConfigName; // If set the user will not be prompted for a name
+  ConfigFormPage(this._configForm,
+      {Key? key, this.initialConfigName, this.oldConfigDirPath})
       : super(key: key);
 
   @override
@@ -29,6 +31,11 @@ class ConfigFormPage extends StatelessWidget {
     // Create the form based on the JSON provided
     var formModel = DynamicFormStateBuilder(_configForm).buildFormModel();
     formModel.setConfigName(initialConfigName ?? "");
+
+    // If edit mode
+    if (oldConfigDirPath != null) {
+      formModel.setPreviousDataFrom(oldConfigDirPath!);
+    }
 
     // Create page
     return MobileSize(
@@ -39,7 +46,8 @@ class ConfigFormPage extends StatelessWidget {
             appBar: RenamableAppBar(
               promptText: "Enter configuration name",
               askOnLoad: initialConfigName == null,
-              initialTitle: Provider.of<DynamicFormState>(context).getConfigName(),
+              initialTitle:
+                  Provider.of<DynamicFormState>(context).getConfigName(),
               onTitleChanged: (String newName) {
                 Provider.of<DynamicFormState>(context, listen: false)
                     .setConfigName(newName);

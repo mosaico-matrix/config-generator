@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:archive/archive.dart';
+import 'package:mosaico_flutter_core/core/exceptions/exception_handler.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaico_widget_configuration.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../../core/networking/services/coap/coap_service.dart';
 import '../../domain/repositories/mosaico_widget_configurations_repository.dart';
 
@@ -27,5 +30,34 @@ class MosaicoWidgetConfigurationsCoapRepository implements MosaicoWidgetConfigur
   @override
   Future<void> deleteWidgetConfiguration({required int configurationId}) async {
     await CoapService.delete('/widget_configurations/configuration_id=$configurationId');
+  }
+
+  @override
+  Future<String> getWidgetConfigurationPackage({required int configurationId}) async {
+    var package = await CoapService.get('/widget_configurations/package/configuration_id=$configurationId');
+
+    // Write the package to a file in the temp directory
+    var tempDir = await getTemporaryDirectory();
+    var folder = Directory(tempDir.path + '/widgetConfigurations');
+    await folder.create();
+    var path = folder.path + '/package.tar.gz';
+    var file = File(path);
+    await file.writeAsBytes(base64Decode(package));
+
+    // Decompress the package
+    var archive = TarDecoder().decodeBytes(GZipDecoder().decodeBytes(file.readAsBytesSync()));
+
+    // Extract the files
+    for (var file in archive) {
+      var filename = folder.path + '/' + file.name;
+      var newFile = File(filename);
+      await newFile.create(recursive: true);
+      await newFile.writeAsBytes(file.content as List<int>);
+    }
+
+    // Remove the package file
+    await file.delete();
+
+    return folder.path;
   }
 }

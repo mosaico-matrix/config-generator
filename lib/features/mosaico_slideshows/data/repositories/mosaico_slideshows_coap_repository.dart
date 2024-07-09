@@ -21,8 +21,13 @@ class MosaicoSlideshowsCoapRepository implements MosaicoSlideshowsRepository
   }
 
   @override
-  Future<void> setActiveSlideshow(MosaicoSlideshow slideshow) async {
+  Future<void> setActiveSlideshow(int slideshowId) async {
     await CoapService.post(
-        _baseUri + '/active','{"slideshow_id": ${slideshow.id}}');
+        _baseUri + '/active','{"slideshow_id": ${slideshowId}}');
+  }
+
+  @override
+  Future<void> deleteSlideshow(int slideshowId) async {
+    await CoapService.delete(_baseUri + '/created/slideshow_id=$slideshowId');
   }
 }

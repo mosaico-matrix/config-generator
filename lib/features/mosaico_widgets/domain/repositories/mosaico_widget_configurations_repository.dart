@@ -12,4 +12,8 @@ abstract class MosaicoWidgetConfigurationsRepository {
 
   /// Delete a widget configuration
   Future<void> deleteWidgetConfiguration({required int configurationId});
+
+  /// Get widget configuration package
+  /// Returns the path to the configuration package saved in a temp folder
+  Future<String> getWidgetConfigurationPackage({required int configurationId});
 }

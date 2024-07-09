@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:logger/logger.dart';
+import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaico_widget_configuration.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
@@ -46,6 +47,10 @@ class ConfigOutput {
    */
   void saveConfigScript(String script) {
     File('$_dataOutputPath/config.chai').writeAsStringSync(script);
+  }
+  
+  void saveConfigJson(String json) {
+    File('$_dataOutputPath/config.json').writeAsStringSync(json);
   }
 
   /**
@@ -96,4 +101,5 @@ class ConfigOutput {
       // whatever
     }
   }
+
 }

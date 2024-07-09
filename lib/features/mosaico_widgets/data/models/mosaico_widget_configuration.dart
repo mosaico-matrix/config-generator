@@ -1,11 +1,11 @@
 import '../../../../core/models/serializable.dart';
 
 class MosaicoWidgetConfiguration implements Serializable {
-  final int id;
+  final int? id;
   final String name;
 
   MosaicoWidgetConfiguration({
-    required this.id,
+     this.id,
     required this.name,
   });
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import '../widgets/fields/mosaico_field.dart';
 /// This class represents the state of the dynamic form.
 class DynamicFormState extends ChangeNotifier {
 
-  /**
+  /*
    * Form information
    */
   String _title = "";
@@ -37,7 +38,7 @@ class DynamicFormState extends ChangeNotifier {
     return _description;
   }
 
-  /**
+  /*
    * Name of the configuration
    * This is used to discriminate between different configurations of the same widget
    */
@@ -54,7 +55,7 @@ class DynamicFormState extends ChangeNotifier {
     return _configName;
   }
 
-  /**
+  /*
    * Form fields
    */
   List<MosaicoField> _fields = [];
@@ -69,7 +70,7 @@ class DynamicFormState extends ChangeNotifier {
     return _fields;
   }
 
-  /**
+  /*
    * Form validation
    */
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -83,17 +84,41 @@ class DynamicFormState extends ChangeNotifier {
     return _formKey.currentState!.validate();
   }
 
-  /**
+  /*
+   * Edit mode values
+   */
+  Map<String, dynamic> _editValues = {};
+
+  void setPreviousDataFrom(String oldConfigDirPath) async {
+    // Get config.json file
+    String json = await File('$oldConfigDirPath/config.json').readAsString();
+    _editValues = jsonDecode(json);
+    notifyListeners();
+  }
+
+  /// Get the value of a field in edit mode
+  dynamic getEditValue(String fieldName) {
+    return _editValues[fieldName];
+  }
+
+  /*
    * Final output
    */
-
   String buildConfigScript()
   {
     String _script = "";
     for (var field in _fields) {
-      _script += field.getScriptCode() + "\n";
+      _script += field.getConfigScriptLine() + "\n";
     }
     return _script;
+  }
+  
+  String buildConfigJson() {
+    Map<String, dynamic> editJson = {};
+    for (var field in _fields) {
+      editJson[field.getName()] = field.getConfigScriptData();
+    }
+    return jsonEncode(editJson);
   }
 
 
@@ -103,6 +128,7 @@ class DynamicFormState extends ChangeNotifier {
     await output.initialize();
     output.setConfigName(_configName);
     output.saveConfigScript(buildConfigScript());
+    output.saveConfigJson(buildConfigJson());
     return output;
   }
 }
