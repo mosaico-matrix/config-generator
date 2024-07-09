@@ -12,7 +12,7 @@ class CoapConfig extends DefaultCoapConfig {
   int get httpPort => 8080;
 
   @override
-  int get ackTimeout => kReleaseMode ? 3000 : 500; // was 3000
+  int get ackTimeout => kReleaseMode ? 10000 : 5000; // was 3000
 
   @override
   double get ackRandomFactor => 1.5;

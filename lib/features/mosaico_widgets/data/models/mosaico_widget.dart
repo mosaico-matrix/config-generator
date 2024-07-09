@@ -54,7 +54,13 @@ class MosaicoWidget implements Serializable {
       user: User.fromJson(json['user']),
       description: json['description'] ?? '',
       tagline: json['tagline'] ?? '',
-      images: json['images']?.cast<String>(),
+      images: [
+        "https://picsum.photos/600/400",
+        "https://picsum.photos/600/400",
+        "https://picsum.photos/600/400",
+        "https://picsum.photos/600/400",
+        "https://picsum.photos/600/400",
+      ]//json['images']?.cast<String>(),
     );
   }
 
