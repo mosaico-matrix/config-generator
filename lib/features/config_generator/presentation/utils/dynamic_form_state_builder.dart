@@ -2,6 +2,7 @@ import 'dart:convert';
 import '../states/dynamic_form_state.dart';
 import '../widgets/fields/mosaico_field.dart';
 import '../widgets/fields/mosaico_string_field.dart';
+import '../widgets/fields/mosaico_string_list_field.dart';
 
 class DynamicFormStateBuilder {
 
@@ -10,14 +11,14 @@ class DynamicFormStateBuilder {
 
 
   /// Adds the common attributes to a generic mosaico component
-  void _addComponentAttributes(MosaicoField component, Map<String, dynamic> attributes) {
+  void _addComponentAttributes(MosaicoField component,
+      Map<String, dynamic> attributes) {
     component.setLabel(attributes['label']);
     component.setPlaceholder(attributes['placeholder']);
     component.setRequired(attributes['required']);
   }
 
   DynamicFormStateBuilder(Map<String, dynamic> configForm) {
-
     // Get the main form
     var form = configForm['form'];
 
@@ -30,10 +31,8 @@ class DynamicFormStateBuilder {
 
     // Cycle through all fields
     for (var field in fields) {
-
       // Get field key (name of the field)
       for (var fieldName in field.keys) {
-
         // Retrieve field attributes
         var attributes = field[fieldName];
 
@@ -43,6 +42,8 @@ class DynamicFormStateBuilder {
           case 'string':
             mosaicoField = MosaicoStringField(fieldName);
             break;
+          case 'string[]':
+            mosaicoField = MosaicoStringListField(fieldName);
           case 'text':
             throw Exception('Text field not implemented yet');
             break;

@@ -15,7 +15,6 @@ class MosaicoStringField extends MosaicoField {
 
     return TextFormField(
       controller: TextEditingController(text: _value),
-      textCapitalization: TextCapitalization.sentences,
       validator: (value) {
         if (value == null || value.isEmpty && isRequired()) {
           return 'Please enter some text';
