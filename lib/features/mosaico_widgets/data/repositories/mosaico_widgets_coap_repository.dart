@@ -25,7 +25,7 @@ class MosaicoWidgetsCoapRepository implements MosaicoLocalWidgetsRepository {
 
   @override
   Future<List<MosaicoWidget>> getInstalledWidgets() async {
-    final data = await CoapService.get(_baseUri + '/installed/'); // note the trailing slash, coap returns 404 otherwise
+    final data = await CoapService.get(_baseUri + '/installed/1=1');
     return List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
   }
 
@@ -37,7 +37,7 @@ class MosaicoWidgetsCoapRepository implements MosaicoLocalWidgetsRepository {
 
   @override
   Future<void> unsetActiveWidget() async {
-    await CoapService.delete(_baseUri + '/active'); // note the trailing slash, coap returns 404 otherwise
+    await CoapService.delete(_baseUri + '/active');
   }
 
   @override

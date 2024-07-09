@@ -1,22 +1,17 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:coap/coap.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:logger/logger.dart';
 import 'package:mosaico_flutter_core/common/widgets/dialogs/text_input_dialog.dart';
 import 'package:mosaico_flutter_core/core/configuration/coap_config.dart';
 import 'package:mosaico_flutter_core/core/configuration/configs.dart';
-import 'package:mosaico_flutter_core/core/exceptions/coap_exception.dart';
 import 'package:mosaico_flutter_core/features/matrix_control/domain/usecases/matrix_ble_service.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaico_widget_configuration.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/mosaico_widgets_coap_repository.dart';
-import 'package:network_info_plus/network_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/networking/services/ble/ble_connection_manager.dart';
 import '../../../../core/networking/services/coap/coap_service.dart';
 import '../../../../core/utils/toaster.dart';
 import '../../../mosaico_loading/presentation/states/mosaico_loading_state.dart';
@@ -33,6 +28,7 @@ class MosaicoDeviceState with ChangeNotifier {
 
   /// Connection status
   bool? _isCoapConnected; // At first we don't know if COAP is connected
+  bool? _isBleConnected;  // At first we don't know if BLE is connected
 
   /// Connecting status
   bool? _isConnecting; // At first we don't know if we are connecting
@@ -48,9 +44,9 @@ class MosaicoDeviceState with ChangeNotifier {
       isConnected ? 'Connected' : (isConnecting ? 'Connecting' : 'Disconnected');
 
   /// BLE connection status
-  String get bleConnectionStatusText => BLEConnectionManager.matrixConnected()
-      ? 'BLE available'
-      : 'BLE not available';
+  String get bleConnectionStatusText => _isBleConnected == true
+      ? 'BLE connected'
+      : (_isBleConnected == false ? 'BLE disconnected' : 'connecting BLE...');
 
   /// Device info
   MosaicoWidget? _activeWidget;
@@ -69,6 +65,14 @@ class MosaicoDeviceState with ChangeNotifier {
   * Networking
   */
   String? _matrixIp;
+
+  void _resetConnectionStatus() {
+    _isCoapConnected = null;
+    _isBleConnected = null;
+    _isConnecting = null;
+    _matrixIp = null;
+    notifyListeners();
+  }
 
   /// Get the matrix IP
   String get matrixIp => _matrixIp ?? 'n/a';
@@ -97,6 +101,7 @@ class MosaicoDeviceState with ChangeNotifier {
 
       // We are connected now!
       _matrixIp = matrixIp;
+      CoapService.setMatrixIp(matrixIp);
       _isCoapConnected = true;
 
       try {
@@ -104,21 +109,34 @@ class MosaicoDeviceState with ChangeNotifier {
         _activeWidget = result.$1;
         _activeWidgetConfiguration = result.$2;
       } catch (e) {
-        // Do not throw here, we need to do other stuff before!
+        logger.e('Error getting active widget');
       }
     }
     _isConnecting = false;
     notifyListeners();
 
     // Connect to the matrix BLE if we are not connected
-    if(!BLEConnectionManager.matrixConnected()) {
-      await BLEConnectionManager.searchAndConnectMatrix();
+    if(!_bleDeviceConnected()) {
+      await _searchAndConnectBleDevice();
     }
+    if (_bleDeviceConnected()) {
+      _isBleConnected = true;
+    } else {
+      _isBleConnected = false;
+    }
+
+    notifyListeners();
   }
 
+  Future<void> retryConnection() async
+  {
+    _resetConnectionStatus();
+    await connect();
+  }
 
   /// Tries to get the matrix IP from the preferences, with BLE characteristics or the debug IP
   Future<String?> _autoGetMatrixIp() async {
+
     // Preferences
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -128,11 +146,12 @@ class MosaicoDeviceState with ChangeNotifier {
       return lastKnownMatrixIp;
 
     // IP from settings did not work, try with BLE
-    if (!BLEConnectionManager.matrixConnected()) {
-      await BLEConnectionManager.searchAndConnectMatrix();
+    if (!_bleDeviceConnected()) {
+      await _searchAndConnectBleDevice();
     }
     try {
-      var ipFromBle = await MatrixBle.getMatrixIp();
+      ensureBleDeviceConnected();
+      var ipFromBle = await _matrixBleService.getMatrixIp(_connectedMatrix!);
       if (ipFromBle != null && await _pingMatrix(ipFromBle)) {
         prefs.setString('matrixIp', ipFromBle);
         return ipFromBle;
@@ -231,5 +250,139 @@ class MosaicoDeviceState with ChangeNotifier {
       Toaster.error('The matrix is not reachable at given address');
     }
     Provider.of<MosaicoLoadingState>(context, listen: false).hideOverlayLoading();
+  }
+
+  /*
+  * BLE
+  */
+  static const String SERVICE_NAME = "PixelForge"; // Friendly name of the matrix
+  static BluetoothDevice? _connectedMatrix;
+  final MatrixBleService _matrixBleService = MatrixBleService();
+
+  void _onMatrixDisconnected(BluetoothConnectionState state) async {
+    if (state == BluetoothConnectionState.disconnected) {
+      //Toaster.error("Matrix disconnected");
+      logger.d("Matrix disconnected");
+      _connectedMatrix = null;
+    }
+  }
+
+  Future<void> _onMatrixConnected(BluetoothDevice device) async
+  {
+    //Toaster.success("Connected to matrix");
+    logger.d("Matrix found: ${device.advName}");
+
+    // Connect to device and stop scanning
+    _connectedMatrix = device;
+    FlutterBluePlus.stopScan();
+    logger.d("Connected to matrix");
+
+
+    // listen for disconnection
+    var subscription = device.connectionState.listen(_onMatrixDisconnected);
+    device.cancelWhenDisconnected(subscription, delayed:true, next:true);
+  }
+
+  Future<void> _onDeviceFound(List<ScanResult> results) async {
+
+    if (results.isEmpty) {
+      return;
+    }
+
+    // Get last discovered device
+    var device = results.last.device;
+    await device.connect(timeout: const Duration(seconds: 10));
+    logger.d("Found device: ${device.remoteId}, ${device.advName}");
+
+    // Discover services of the device
+    List<BluetoothService> services = await device.discoverServices();
+    for (var service in services) {
+      logger.d("Device is offering service: ${service.uuid}");
+
+      // Search for the service we are interested in
+      if (service.uuid == Configs.mosaicoBLEServiceUUID) {
+
+        logger.d("Found the service we are looking for, hello matrix!");
+
+        // Found the service, connect to the device
+        _onMatrixConnected(device);
+      }
+    }
+
+    // Device is not the one we are looking for
+    if (_connectedMatrix == null) {
+      logger.d("Device is not the matrix we are looking for");
+      await device.disconnect();
+    }
+  }
+
+  /// Check if the matrix is connected and ready to receive data
+  static bool _bleDeviceConnected() {
+    return _connectedMatrix != null && _connectedMatrix!.isConnected;
+  }
+
+  /// Send raw data to the matrix
+  static Future<void> sendMatrixRawData(List<int> data) async {
+    if (_bleDeviceConnected() == false) {
+      Toaster.error("Trying to send data to a disconnected matrix");
+      return;
+    }
+
+    // Check if data is longer than MTU
+    if (data.length > _connectedMatrix!.mtuNow - 3) {
+      Toaster.error("Data is too long for the matrix");
+      return;
+    }
+  }
+
+  static void ensureBleDeviceConnected() async {
+    if (_bleDeviceConnected() == false) {
+      throw Exception("Matrix is not connected");
+    }
+  }
+
+  static BluetoothDevice getConnectedMatrixBleDevice() {
+    return _connectedMatrix == null ? throw Exception("Matrix is not connected") : _connectedMatrix!;
+  }
+
+  // Start scanning for the matrix and connect to it if found
+  // This function is asynchronous and returns when the matrix is connected or the scan times out
+  Future<void> _searchAndConnectBleDevice() async {
+
+
+    // Check if Bluetooth is supported
+    if (await FlutterBluePlus.isSupported == false) {
+      Toaster.error("Bluetooth is not supported on this device");
+      return;
+    }
+
+    // On Android, we can request to turn on Bluetooth
+    if (Platform.isAndroid) {
+      await FlutterBluePlus.turnOn();
+    }
+
+    // Wait for Bluetooth enabled & permission granted
+    var bluetoothState = await FlutterBluePlus.adapterState.first;
+    if (bluetoothState != BluetoothAdapterState.on) {
+      //Toaster.error("Bluetooth is turned off");
+      return;
+    }
+
+    // Subscription to scan for devices
+    var scanSubscription = FlutterBluePlus.onScanResults.listen(_onDeviceFound);
+
+    // cleanup: cancel subscription when scanning stops
+    FlutterBluePlus.cancelWhenScanComplete(scanSubscription);
+
+    // Start scanning w/ timeout
+    await FlutterBluePlus.startScan(
+      //withNames: [SERVICE_NAME],
+        withServices: [Configs.mosaicoBLEServiceUUID],
+        timeout: const Duration(seconds: 15));
+
+    // Wait for scan until end
+    await FlutterBluePlus.isScanning
+        .where((isScanning) => isScanning == false)
+        .first;
   }
 }

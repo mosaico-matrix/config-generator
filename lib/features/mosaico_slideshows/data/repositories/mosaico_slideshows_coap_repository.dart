@@ -10,7 +10,7 @@ class MosaicoSlideshowsCoapRepository implements MosaicoSlideshowsRepository
 
   @override
   Future<List<MosaicoSlideshow>> getSlideshows() async {
-    var result = await CoapService.get(_baseUri + '/created/');
+    var result = await CoapService.get(_baseUri + '/created/1=1');
     return (result as List).map((json) => MosaicoSlideshow.fromJson(json)).toList();
   }
 
