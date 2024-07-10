@@ -87,11 +87,14 @@ class DynamicFormState extends ChangeNotifier {
   /*
    * Edit mode values
    */
+  String _oldConfigDirPath = "";
   Map<String, dynamic> _editValues = {};
 
+  /// Set data from the previous configuration
   void setPreviousDataFrom(String oldConfigDirPath) async {
+    _oldConfigDirPath = oldConfigDirPath;
     // Get config.json file
-    String json = await File('$oldConfigDirPath/config.json').readAsString();
+    String json = File('$oldConfigDirPath/config.json').readAsStringSync();
     _editValues = jsonDecode(json);
     notifyListeners();
   }
@@ -101,6 +104,10 @@ class DynamicFormState extends ChangeNotifier {
     return _editValues[fieldName];
   }
 
+  String getOldConfigDirPath() {
+    return _oldConfigDirPath;
+  }
+
   /*
    * Final output
    */
@@ -108,7 +115,7 @@ class DynamicFormState extends ChangeNotifier {
   {
     String _script = "";
     for (var field in _fields) {
-      _script += field.getConfigScriptLine() + "\n";
+      _script += field.mosaicoFieldState.getConfigScriptLine() + "\n";
     }
     return _script;
   }
@@ -116,7 +123,7 @@ class DynamicFormState extends ChangeNotifier {
   String buildConfigJson() {
     Map<String, dynamic> editJson = {};
     for (var field in _fields) {
-      editJson[field.getName()] = field.getConfigScriptData();
+      editJson[field.mosaicoFieldState.getName()] = field.mosaicoFieldState.saveDataForEdit();
     }
     return jsonEncode(editJson);
   }

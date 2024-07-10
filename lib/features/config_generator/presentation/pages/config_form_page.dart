@@ -29,13 +29,10 @@ class ConfigFormPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     // Create the form based on the JSON provided
-    var formModel = DynamicFormStateBuilder(_configForm).buildFormModel();
-    formModel.setConfigName(initialConfigName ?? "");
+    var formModel = DynamicFormStateBuilder(_configForm,oldConfigDirPath).buildFormModel();
 
-    // If edit mode
-    if (oldConfigDirPath != null) {
-      formModel.setPreviousDataFrom(oldConfigDirPath!);
-    }
+    // Check if provided config name
+    formModel.setConfigName(initialConfigName ?? "");
 
     // Create page
     return MobileSize(

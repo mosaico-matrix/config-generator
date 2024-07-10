@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:mosaico_flutter_core/features/config_generator/presentation/widgets/fields/mosaico_string_list_field.dart';
+
 import '../states/dynamic_form_state.dart';
 import '../widgets/fields/mosaico_field.dart';
 import '../widgets/fields/mosaico_string_field.dart';
-import '../widgets/fields/mosaico_string_list_field.dart';
 
 class DynamicFormStateBuilder {
 
@@ -13,12 +14,18 @@ class DynamicFormStateBuilder {
   /// Adds the common attributes to a generic mosaico component
   void _addComponentAttributes(MosaicoField component,
       Map<String, dynamic> attributes) {
-    component.setLabel(attributes['label']);
-    component.setPlaceholder(attributes['placeholder']);
-    component.setRequired(attributes['required']);
+    component.mosaicoFieldState.setLabel(attributes['label']);
+    component.mosaicoFieldState.setPlaceholder(attributes['placeholder']);
+    component.mosaicoFieldState.setRequired(attributes['required']);
   }
 
-  DynamicFormStateBuilder(Map<String, dynamic> configForm) {
+  DynamicFormStateBuilder(Map<String, dynamic> configForm, String? oldConfigDirPath) {
+
+    // Check if need to set old config path
+    if (oldConfigDirPath != null) {
+      _formModel.setPreviousDataFrom(oldConfigDirPath);
+    }
+
     // Get the main form
     var form = configForm['form'];
 
@@ -43,7 +50,8 @@ class DynamicFormStateBuilder {
             mosaicoField = MosaicoStringField(fieldName);
             break;
           case 'string[]':
-            mosaicoField = MosaicoStringListField(fieldName);
+             mosaicoField = MosaicoStringListField(fieldName);
+            break;
           case 'text':
             throw Exception('Text field not implemented yet');
             break;

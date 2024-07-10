@@ -17,7 +17,7 @@ class MosaicoWidget implements Serializable {
   final String tagline;
   String get iconUrl => Configs.apiUrl + '/widgets/$id/icon';
   final List<String>? images;
-  bool installed = false;
+  bool? installed;
   MosaicoWidgetMetadata? metadata;
   List<MosaicoWidgetConfiguration>? configurations = [];
 
@@ -31,6 +31,7 @@ class MosaicoWidget implements Serializable {
     this.user,
     this.images,
     this.metadata,
+    this.installed
   });
 
   /// This is used when deserializing COAP responses
