@@ -115,7 +115,7 @@ class DynamicFormState extends ChangeNotifier {
   {
     String _script = "";
     for (var field in _fields) {
-      _script += field.mosaicoFieldState.getConfigScriptLine() + "\n";
+      _script += field.getState().getConfigScriptLine() + "\n";
     }
     return _script;
   }
@@ -123,7 +123,7 @@ class DynamicFormState extends ChangeNotifier {
   String buildConfigJson() {
     Map<String, dynamic> editJson = {};
     for (var field in _fields) {
-      editJson[field.mosaicoFieldState.getName()] = field.mosaicoFieldState.saveDataForEdit();
+      editJson[field.getState().getName()] = field.getState().saveDataForEdit();
     }
     return jsonEncode(editJson);
   }
@@ -133,9 +133,23 @@ class DynamicFormState extends ChangeNotifier {
   Future<ConfigOutput> export() async {
     var output = ConfigOutput();
     await output.initialize();
+
+    // Config name
     output.setConfigName(_configName);
+
+    // The actual config script
     output.saveConfigScript(buildConfigScript());
+
+    // Config json to edit this config later
     output.saveConfigJson(buildConfigJson());
+
+    // Save assets
+    for (var field in _fields) {
+      if (field.getState().getAsset() != null) {
+        output.saveAsset(field.getState().getName(), field.getState().getAsset()!);
+      }
+    }
+
     return output;
   }
 }

@@ -2,14 +2,15 @@ import 'package:coap/builder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../states/dynamic_form_state.dart';
+import '../../states/fields/mosaico_field_state.dart';
 import 'mosaico_field.dart';
 
 class MosaicoStringListField extends MosaicoField<MosaicoStringListFieldState> {
-  MosaicoStringListField(String name, {Key? key})
-      : super(key: key, name: name, mosaicoFieldState: MosaicoStringListFieldState());
+
+  MosaicoStringListField() : super(state: MosaicoStringListFieldState());
 
   @override
-  Widget buildField(BuildContext context, DynamicFormState state) {
+  Widget buildField(BuildContext context) {
     return Consumer<MosaicoStringListFieldState>(
       builder: (context, stringListState, _) {
         return Column(
@@ -111,7 +112,7 @@ class MosaicoStringListFieldState extends MosaicoFieldState {
 
   @override
   void init(oldValue) {
-    _values = (oldValue as List<String>?) ?? [''];
+    _values = (oldValue is List<dynamic>) ? List<String>.from(oldValue) : [''];
     notifyListeners();
   }
 

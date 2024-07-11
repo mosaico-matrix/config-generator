@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mosaico_flutter_core/features/config_generator/presentation/states/fields/mosaico_field_state.dart';
 import 'package:provider/provider.dart';
 import '../../states/dynamic_form_state.dart';
 import 'mosaico_field.dart';
 
 class MosaicoStringField extends MosaicoField<MosaicoStringFieldState> {
 
-  MosaicoStringField(String name, {Key? key}) : super(key: key, name: name, mosaicoFieldState: MosaicoStringFieldState());
+  MosaicoStringField({Key? key}) : super(state: new MosaicoStringFieldState());
 
   @override
-  Widget buildField(BuildContext context, DynamicFormState formState) {
+  Widget buildField(BuildContext context) {
     return Consumer<MosaicoStringFieldState>(
       builder: (context, state, _) {
         return TextFormField(
@@ -31,6 +32,7 @@ class MosaicoStringField extends MosaicoField<MosaicoStringFieldState> {
       },
     );
   }
+
 }
 
 class MosaicoStringFieldState extends MosaicoFieldState {
@@ -39,6 +41,7 @@ class MosaicoStringFieldState extends MosaicoFieldState {
   * Field value
   */
   String _value = "";
+
   String get value => _value;
   void setValue(String value) {
     _value = value;

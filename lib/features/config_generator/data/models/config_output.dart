@@ -53,6 +53,12 @@ class ConfigOutput {
     File('$_dataOutputPath/config.json').writeAsStringSync(json);
   }
 
+  void saveAsset(String assetName, String assetContent) {
+    // Create assets directory if it doesn't exist
+    Directory('$_dataOutputPath/assets').createSync();
+    File('$_dataOutputPath/assets/$assetName').writeAsStringSync(assetContent);
+  }
+
   /**
    * Export everything
    */

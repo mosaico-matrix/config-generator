@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:mosaico_flutter_core/features/config_generator/presentation/widgets/fields/mosaico_image_field.dart';
 import 'package:mosaico_flutter_core/features/config_generator/presentation/widgets/fields/mosaico_string_list_field.dart';
 
 import '../states/dynamic_form_state.dart';
@@ -13,10 +14,11 @@ class DynamicFormStateBuilder {
 
   /// Adds the common attributes to a generic mosaico component
   void _addComponentAttributes(MosaicoField component,
-      Map<String, dynamic> attributes) {
-    component.mosaicoFieldState.setLabel(attributes['label']);
-    component.mosaicoFieldState.setPlaceholder(attributes['placeholder']);
-    component.mosaicoFieldState.setRequired(attributes['required']);
+      Map<String, dynamic> attributes, String fieldName) {
+    component.getState().setName(fieldName);
+    component.getState().setLabel(attributes['label']);
+    component.getState().setPlaceholder(attributes['placeholder']);
+    component.getState().setRequired(attributes['required']);
   }
 
   DynamicFormStateBuilder(Map<String, dynamic> configForm, String? oldConfigDirPath) {
@@ -47,10 +49,10 @@ class DynamicFormStateBuilder {
         MosaicoField mosaicoField;
         switch (attributes['type']) {
           case 'string':
-            mosaicoField = MosaicoStringField(fieldName);
+            mosaicoField = MosaicoStringField();
             break;
           case 'string[]':
-             mosaicoField = MosaicoStringListField(fieldName);
+            mosaicoField = MosaicoStringListField();
             break;
           case 'text':
             throw Exception('Text field not implemented yet');
@@ -59,7 +61,7 @@ class DynamicFormStateBuilder {
             throw Exception('Checkbox field not implemented yet');
             break;
           case 'image':
-            throw Exception('Image field not implemented yet');
+            mosaicoField = MosaicoImageField();
             break;
           case 'animation':
             throw Exception('Animation field not implemented yet');
@@ -69,7 +71,7 @@ class DynamicFormStateBuilder {
         }
 
         // Add common attributes
-        _addComponentAttributes(mosaicoField, attributes);
+        _addComponentAttributes(mosaicoField, attributes, fieldName);
 
         // Add the field to the form
         _formModel.addField(mosaicoField);

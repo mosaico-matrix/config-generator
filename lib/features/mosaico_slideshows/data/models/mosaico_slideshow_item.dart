@@ -8,6 +8,8 @@ class MosaicoSlideshowItem implements Serializable
   int position;
   int secondsDuration;
 
+  // This one is only used in the UI
+  bool shouldSelectConfiguration = false;
   MosaicoSlideshowItem({
     this.id = -1,
     this.widgetId = -1,

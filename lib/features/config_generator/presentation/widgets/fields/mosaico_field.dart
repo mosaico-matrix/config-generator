@@ -1,109 +1,38 @@
+
 import 'package:flutter/material.dart';
+import 'package:mosaico_flutter_core/features/config_generator/presentation/states/fields/mosaico_field_state.dart';
 import 'package:provider/provider.dart';
 
 import '../../states/dynamic_form_state.dart';
 
-abstract class MosaicoField<FieldState extends MosaicoFieldState>
-    extends StatelessWidget {
-  final FieldState mosaicoFieldState;
-  MosaicoField({Key? key, required this.mosaicoFieldState, required name}) : super(key: key) {
-    mosaicoFieldState.setName(name);
-    mosaicoFieldState.setLabel(name);
-  }
+abstract class MosaicoField<T extends MosaicoFieldState> extends StatelessWidget {
 
-  /// This method should return the widget that represents the field
-  Widget buildField(BuildContext context, DynamicFormState state);
+  final T state;
+  const MosaicoField({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
-    
-    // Get global form state
-    var formState = Provider.of<DynamicFormState>(context, listen: false);
-
-    // Pass it to the field
-    mosaicoFieldState.setFormState(formState);
-
-    // Initialize the field with the old value if it exists
-    mosaicoFieldState.init(formState.getEditValue(mosaicoFieldState.getName()));
-
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: ChangeNotifierProvider<FieldState>.value(
-        value: mosaicoFieldState,
-        child: Builder(
+    return ChangeNotifierProvider<T>(
+        create: (context) => state,
+        child:Builder(
           builder: (context) {
-            return buildField(context, formState);
-          },
-        ),
-      ),
+
+            // Get dynamic form state to init with edit value
+            var dynamicFormState = Provider.of<DynamicFormState>(context, listen: false);
+            state.init(dynamicFormState.getEditValue(state.getName()));
+
+            return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: buildField(context),
+                  );
+          }
+        )
     );
   }
-}
 
-abstract class MosaicoFieldState extends ChangeNotifier {
+  Widget buildField(BuildContext context);
 
-  /*
-  * Form state passed down to the field
-  */
-  late DynamicFormState _formState;
-  void setFormState(DynamicFormState formState) {
-    _formState = formState;
+  T getState() {
+    return state;
   }
-  DynamicFormState getFormState() {
-    return _formState;
-  }
-
-  /*
-  * Basic field stuff
-  */
-  late String _name = "";
-  void setName(String name) {
-    _name = name;
-  }
-  String getName() {
-    return _name;
-  }
-
-  late String _label;
-
-  void setLabel(String label) {
-    _label = label;
-  }
-
-  String getLabel() {
-    return _label;
-  }
-
-  String? _placeholder;
-
-  void setPlaceholder(String placeholder) {
-    _placeholder = placeholder;
-  }
-
-  String? getPlaceholder() {
-    return _placeholder;
-  }
-
-  bool _required = false;
-
-  void setRequired(bool required) {
-    _required = required;
-  }
-
-  bool isRequired() {
-    return _required;
-  }
-
-  /*
-  * Stuff to override
-  */
-
-  /// This method should return the script code to run before the widget script is loaded onto the matrix
-  String getConfigScriptLine();
-
-  /// This method should save the field data to edit it later
-  dynamic saveDataForEdit();
-
-  void init(dynamic oldValue);
 }
