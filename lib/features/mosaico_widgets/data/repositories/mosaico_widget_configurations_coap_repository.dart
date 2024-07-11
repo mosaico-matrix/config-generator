@@ -62,9 +62,18 @@ class MosaicoWidgetConfigurationsCoapRepository implements MosaicoWidgetConfigur
     // Extract the files
     for (var file in archive) {
       var filename = folder.path + '/' + file.name;
-      var newFile = File(filename);
-      await newFile.create(recursive: true);
-      await newFile.writeAsBytes(file.content as List<int>);
+
+      // Check if file or directory
+      if (file.isFile) {
+        var newFile = File(filename);
+        newFile.createSync(recursive: true);
+        newFile.writeAsBytesSync(file.content as List<int>);
+      } else {
+        var newDir = Directory(filename);
+        newDir.createSync(recursive: true);
+      }
+
+
     }
 
     // Remove the package file

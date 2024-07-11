@@ -7,7 +7,7 @@ import 'mosaico_field.dart';
 
 class MosaicoStringListField extends MosaicoField<MosaicoStringListFieldState> {
 
-  MosaicoStringListField() : super(state: MosaicoStringListFieldState());
+  MosaicoStringListField() : super(fieldState: MosaicoStringListFieldState());
 
   @override
   Widget buildField(BuildContext context) {
@@ -16,64 +16,41 @@ class MosaicoStringListField extends MosaicoField<MosaicoStringListFieldState> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              stringListState.getName().capitalize(),
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(12),
-              margin: EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (int i = 0; i < stringListState.values.length; i++)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: TextEditingController(text: stringListState.values[i]),
-                            onChanged: (value) => stringListState.updateValue(i, value),
-                            decoration: InputDecoration(
-                              labelText: 'Value ${i + 1}',
-                              hintText: 'Enter ${stringListState.getName().toLowerCase()}',
-                              hintStyle: TextStyle(color: Color(0xFFCCCCCC)),
-                              fillColor: Colors.transparent,
-                            ),
-                          ),
+            for (int i = 0; i < stringListState.values.length; i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: TextEditingController(
+                            text: stringListState.values[i]),
+                        onChanged: (value) =>
+                            stringListState.updateValue(i, value),
+                        decoration: InputDecoration(
+                          hintText: 'Enter ${stringListState.getPlaceholder()}',
+                          hintStyle: TextStyle(color: Color(0xFFCCCCCC)),
+                          fillColor: Colors.transparent,
                         ),
-                        IconButton(
-                          icon: Icon(Icons.remove_circle),
-                          onPressed: () => stringListState.removeValue(i),
-                        ),
-                      ],
+                      ),
                     ),
-                  Center(
-                    child: IconButton(
-                      icon: Icon(Icons.add_circle),
-                      onPressed: stringListState.addValue,
+                    IconButton(
+                      icon: Icon(Icons.remove_circle),
+                      onPressed: () => stringListState.removeValue(i),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+            Center(
+              child: IconButton(
+                icon: Icon(Icons.add_circle),
+                onPressed: stringListState.addValue,
               ),
             ),
           ],
         );
-      },
+      }
     );
-  }
-
-  @override
-  getConfigScriptData() {}
-
-  @override
-  String getConfigScriptLine() {
-    return '';
   }
 }
 
@@ -119,5 +96,17 @@ class MosaicoStringListFieldState extends MosaicoFieldState {
   @override
   saveDataForEdit() {
     return _values;
+  }
+
+  @override
+  getAsset() {
+    return null; // we don't need to save an asset
+  }
+
+  @override
+  String? validate() {
+    return _values.any((element) => element.isNotEmpty) || !isRequired()
+        ? null
+        : 'This field is required';
   }
 }

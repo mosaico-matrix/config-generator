@@ -5,7 +5,7 @@ import '../dynamic_form_state.dart';
 abstract class MosaicoFieldState extends ChangeNotifier {
 
   /*
-  * Basic field stuff
+  * Name
   */
   late String _name = "";
   void setName(String name) {
@@ -15,39 +15,58 @@ abstract class MosaicoFieldState extends ChangeNotifier {
     return _name;
   }
 
+  /*
+  * Label
+  */
   late String _label;
-
   void setLabel(String label) {
     _label = label;
   }
-
   String getLabel() {
     return _label;
   }
 
+  /*
+  * Placeholder
+  */
   String? _placeholder;
-
   void setPlaceholder(String placeholder) {
     _placeholder = placeholder;
   }
-
   String? getPlaceholder() {
     return _placeholder;
   }
 
+  /*
+  * Required
+  */
   bool _required = false;
-
   void setRequired(bool required) {
     _required = required;
   }
-
   bool isRequired() {
     return _required;
   }
 
   /*
+  * Edit mode
+  */
+  String? _oldConfigPath;
+  bool get isEditMode => _oldConfigPath != null && _oldConfigPath!.isNotEmpty;
+  void setOldConfigPath(String oldConfigPath) {
+    _oldConfigPath = oldConfigPath;
+  }
+  String? getOldConfigPath() {
+    return _oldConfigPath;
+  }
+
+  /*
   * Stuff to override
   */
+
+  /// Called when form is submitted
+  /// Return null if valid, error message if not
+  String? validate();
 
   /// This method should return the script code to run before the widget script is loaded onto the matrix
   String getConfigScriptLine();
@@ -59,7 +78,5 @@ abstract class MosaicoFieldState extends ChangeNotifier {
   void init(dynamic oldValue);
 
   /// Optional override to get an asset
-  dynamic getAsset(){
-    return null;
-  }
+  dynamic getAsset();
 }

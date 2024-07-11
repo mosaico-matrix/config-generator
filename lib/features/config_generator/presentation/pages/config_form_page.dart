@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mosaico_flutter_core/common/widgets/renamable_app_bar.dart';
+import 'package:mosaico_flutter_core/core/utils/toaster.dart';
 import 'package:provider/provider.dart';
 import '../../../../common/widgets/dialogs/text_input_dialog.dart';
 import '../../../../common/widgets/mobile_size.dart';
@@ -58,6 +59,12 @@ class ConfigFormPage extends StatelessWidget {
 
                 // Try to validate the form
                 if (!formState.validate()) {
+                  return;
+                }
+
+                // Check if entered name
+                if (formState.getConfigName().isEmpty) {
+                  Toaster.warning("Please enter a name for the configuration");
                   return;
                 }
 

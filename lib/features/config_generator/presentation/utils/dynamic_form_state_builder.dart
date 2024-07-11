@@ -16,9 +16,10 @@ class DynamicFormStateBuilder {
   void _addComponentAttributes(MosaicoField component,
       Map<String, dynamic> attributes, String fieldName) {
     component.getState().setName(fieldName);
-    component.getState().setLabel(attributes['label']);
-    component.getState().setPlaceholder(attributes['placeholder']);
+    component.getState().setLabel(attributes['label'] ?? fieldName);
+    component.getState().setPlaceholder(attributes['placeholder'] ?? '');
     component.getState().setRequired(attributes['required']);
+    component.getState().setOldConfigPath(_formModel.getOldConfigDirPath());
   }
 
   DynamicFormStateBuilder(Map<String, dynamic> configForm, String? oldConfigDirPath) {

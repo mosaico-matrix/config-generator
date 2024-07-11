@@ -6,24 +6,17 @@ import 'mosaico_field.dart';
 
 class MosaicoStringField extends MosaicoField<MosaicoStringFieldState> {
 
-  MosaicoStringField({Key? key}) : super(state: new MosaicoStringFieldState());
+  MosaicoStringField({Key? key}) : super(fieldState: new MosaicoStringFieldState());
 
   @override
   Widget buildField(BuildContext context) {
     return Consumer<MosaicoStringFieldState>(
       builder: (context, state, _) {
-        return TextFormField(
+        return TextField(
           controller: TextEditingController(text: state.value),
-          validator: (value) {
-            if (value == null || value.isEmpty && state.isRequired()) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            labelText: state.getLabel(),
+          decoration: InputDecoration.collapsed(
+            hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
             hintText: state.getPlaceholder(),
-            fillColor: Colors.transparent,
           ),
           onChanged: (value) {
             state.setValue(value);
@@ -61,5 +54,15 @@ class MosaicoStringFieldState extends MosaicoFieldState {
   void init(oldValue) {
     _value = oldValue ?? "";
     notifyListeners();
+  }
+
+  @override
+  getAsset() {
+    return null; // we don't need to save an asset for a string field
+  }
+
+  @override
+  String? validate() {
+    return _value.isNotEmpty || !isRequired() ? null : "This field is required";
   }
 }
