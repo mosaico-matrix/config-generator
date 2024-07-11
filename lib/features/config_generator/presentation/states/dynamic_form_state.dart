@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import '../../data/models/config_output.dart';
 import '../widgets/fields/mosaico_field.dart';
 
-
 /// This class represents the state of the dynamic form.
 class DynamicFormState extends ChangeNotifier {
-
   /*
    * Form information
    */
@@ -88,20 +86,20 @@ class DynamicFormState extends ChangeNotifier {
    * Edit mode values
    */
   String _oldConfigDirPath = "";
-  Map<String, dynamic> _editValues = {};
+  Map<String, dynamic> _previousConfig = {};
 
   /// Set data from the previous configuration
   void setPreviousDataFrom(String oldConfigDirPath) async {
     _oldConfigDirPath = oldConfigDirPath;
     // Get config.json file
     String json = File('$oldConfigDirPath/config.json').readAsStringSync();
-    _editValues = jsonDecode(json);
+    _previousConfig = jsonDecode(json);
     notifyListeners();
   }
 
   /// Get the value of a field in edit mode
   dynamic getEditValue(String fieldName) {
-    return _editValues[fieldName];
+    return _previousConfig[fieldName];
   }
 
   String getOldConfigDirPath() {
@@ -111,23 +109,15 @@ class DynamicFormState extends ChangeNotifier {
   /*
    * Final output
    */
-  String buildConfigScript()
-  {
-    String _script = "";
-    for (var field in _fields) {
-      _script += field.getState().getConfigScriptLine() + "\n";
-    }
-    return _script;
-  }
-  
   String buildConfigJson() {
     Map<String, dynamic> editJson = {};
     for (var field in _fields) {
-      editJson[field.getState().getName()] = field.getState().saveDataForEdit();
+      var fieldData = field.getState().getData();
+      if (fieldData == null) continue;
+      editJson[field.getState().getName()] = field.getState().getData();
     }
     return jsonEncode(editJson);
   }
-
 
   // Export the form to a ConfigOutput object
   Future<ConfigOutput> export() async {
@@ -137,16 +127,14 @@ class DynamicFormState extends ChangeNotifier {
     // Config name
     output.setConfigName(_configName);
 
-    // The actual config script
-    output.saveConfigScript(buildConfigScript());
-
-    // Config json to edit this config later
+    // Config json
     output.saveConfigJson(buildConfigJson());
 
-    // Save assets
+    // Assets
     for (var field in _fields) {
       if (field.getState().getAsset() != null) {
-        output.saveAsset(field.getState().getName(), field.getState().getAsset()!);
+        output.saveAsset(
+            field.getState().getName(), field.getState().getAsset()!);
       }
     }
 

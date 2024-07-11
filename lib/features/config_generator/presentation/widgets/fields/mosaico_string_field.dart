@@ -41,16 +41,6 @@ class MosaicoStringFieldState extends MosaicoFieldState {
   }
 
   @override
-  saveDataForEdit() {
-    return _value;
-  }
-
-  @override
-  String getConfigScriptLine() {
-    return '${getName()} = "$_value"';
-  }
-
-  @override
   void init(oldValue) {
     _value = oldValue ?? "";
     notifyListeners();
@@ -64,5 +54,10 @@ class MosaicoStringFieldState extends MosaicoFieldState {
   @override
   String? validate() {
     return _value.isNotEmpty || !isRequired() ? null : "This field is required";
+  }
+
+  @override
+  getData() {
+    return _value;
   }
 }

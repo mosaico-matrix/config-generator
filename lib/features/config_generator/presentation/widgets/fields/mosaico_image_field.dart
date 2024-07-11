@@ -91,16 +91,6 @@ class MosaicoImageFieldState extends MosaicoFieldState {
   }
 
   @override
-  saveDataForEdit() {
-    return null;
-  }
-
-  @override
-  String getConfigScriptLine() {
-    return "";
-  }
-
-  @override
   getAsset() {
     return _ppm;
   }
@@ -114,7 +104,8 @@ class MosaicoImageFieldState extends MosaicoFieldState {
     // Load image
     var imagePath = getOldConfigPath()! + '/assets/' + getName();
     File file = File(imagePath);
-    var image = _convertFromPPM(await file.readAsString());
+    _ppm = await file.readAsString();
+    var image = _convertFromPPM(_ppm!);
     _imageBytes = Uint8List.fromList(img.encodePng(image));
     notifyListeners();
   }
@@ -163,7 +154,7 @@ class MosaicoImageFieldState extends MosaicoFieldState {
     while (lines[currentLineIndex].startsWith('#')) {
       currentLineIndex++; // skip comments
     }
-    int maxColorValue = int.parse(lines[currentLineIndex++].trim());
+    int.parse(lines[currentLineIndex++].trim());
 
     // Create the image
     img.Image image = img.Image(width: width , height: height);
@@ -202,6 +193,11 @@ class MosaicoImageFieldState extends MosaicoFieldState {
   @override
   String? validate() {
     return _ppm != null || !isRequired() ? null : 'You must pick an image';
+  }
+
+  @override
+  getData() {
+    return null;
   }
 
 

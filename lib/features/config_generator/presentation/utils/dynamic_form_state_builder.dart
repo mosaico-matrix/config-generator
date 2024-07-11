@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:mosaico_flutter_core/features/config_generator/presentation/widgets/fields/mosaico_color_field.dart';
 import 'package:mosaico_flutter_core/features/config_generator/presentation/widgets/fields/mosaico_image_field.dart';
 import 'package:mosaico_flutter_core/features/config_generator/presentation/widgets/fields/mosaico_string_list_field.dart';
 
@@ -55,15 +56,19 @@ class DynamicFormStateBuilder {
           case 'string[]':
             mosaicoField = MosaicoStringListField();
             break;
+          case 'image':
+            mosaicoField = MosaicoImageField();
+            break;
+          case 'color':
+            mosaicoField = MosaicoColorField();
+            break;
           case 'text':
             throw Exception('Text field not implemented yet');
             break;
           case 'checkbox':
             throw Exception('Checkbox field not implemented yet');
             break;
-          case 'image':
-            mosaicoField = MosaicoImageField();
-            break;
+
           case 'animation':
             throw Exception('Animation field not implemented yet');
             break;

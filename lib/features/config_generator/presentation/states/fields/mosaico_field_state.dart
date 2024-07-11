@@ -68,15 +68,12 @@ abstract class MosaicoFieldState extends ChangeNotifier {
   /// Return null if valid, error message if not
   String? validate();
 
-  /// This method should return the script code to run before the widget script is loaded onto the matrix
-  String getConfigScriptLine();
+  /// This method should return the field data to be available in the config json
+  dynamic getData();
 
-  /// This method should save the field data to edit it later
-  dynamic saveDataForEdit();
-
-  /// Provides the field with the old value
-  void init(dynamic oldValue);
-
-  /// Optional override to get an asset
+  /// Optional override to save an asset into the config
   dynamic getAsset();
+
+  /// Provides the field with the old value previously saved with getData
+  void init(dynamic oldValue);
 }

@@ -81,21 +81,9 @@ class MosaicoStringListFieldState extends MosaicoFieldState {
   * Overloaded
   */
   @override
-  String getConfigScriptLine() {
-
-    // Create python array
-    return '${getName()} = [${_values.map((e) => '"$e"').join(', ')}]';
-  }
-
-  @override
   void init(oldValue) {
     _values = (oldValue is List<dynamic>) ? List<String>.from(oldValue) : [''];
     notifyListeners();
-  }
-
-  @override
-  saveDataForEdit() {
-    return _values;
   }
 
   @override
@@ -108,5 +96,10 @@ class MosaicoStringListFieldState extends MosaicoFieldState {
     return _values.any((element) => element.isNotEmpty) || !isRequired()
         ? null
         : 'This field is required';
+  }
+
+  @override
+  getData() {
+    return _values;
   }
 }
