@@ -57,7 +57,12 @@ class MosaicoColorFieldState extends MosaicoFieldState {
   }
 
   @override
-  void init(oldValue) {}
+  void init(oldValue) {
+    if (oldValue != null) {
+      _color = Color(int.parse(oldValue.substring(1), radix: 16));
+      _color = _color.withAlpha(255);
+    }
+  }
 
   @override
   getAsset() {
