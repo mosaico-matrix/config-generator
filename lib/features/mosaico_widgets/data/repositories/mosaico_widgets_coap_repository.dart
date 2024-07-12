@@ -14,8 +14,9 @@ class MosaicoWidgetsCoapRepository implements MosaicoLocalWidgetsRepository {
   static const String _baseUri = '/widgets';
 
   @override
-  Future<void> installWidget({required int storeId}) async {
-    await CoapService.post(_baseUri + '/installed/widget_store_id=$storeId', '');
+  Future<MosaicoWidget> installWidget({required int storeId}) async {
+    var result = await CoapService.post(_baseUri + '/installed/widget_store_id=$storeId', '');
+    return MosaicoWidget.fromJson(result);
   }
 
   @override

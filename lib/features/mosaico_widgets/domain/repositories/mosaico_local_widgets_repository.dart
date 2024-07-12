@@ -6,7 +6,7 @@ import '../../data/models/mosaico_widget_configuration.dart';
 abstract class MosaicoLocalWidgetsRepository {
 
   /// Install a widget from the app store
-  Future<void> installWidget({required int storeId});
+  Future<MosaicoWidget> installWidget({required int storeId});
 
   /// Uninstall a widget previously installed
   Future<void> uninstallWidget({required int widgetId});
