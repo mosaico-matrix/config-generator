@@ -45,10 +45,6 @@ class ConfigOutput {
   /**
    * Save files to disk in temp folder as they are provided
    */
-  void saveConfigScript(String script) {
-    File('$_dataOutputPath/config.py').writeAsStringSync(script);
-  }
-  
   void saveConfigJson(String json) {
     File('$_dataOutputPath/config.json').writeAsStringSync(json);
   }
