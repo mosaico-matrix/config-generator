@@ -28,7 +28,7 @@ class MosaicoImageField extends MosaicoField<MosaicoImageFieldState> {
                 return Image.memory(
                   state.imageBytes!,
                   repeat: ImageRepeat.noRepeat,
-                  width: double.infinity,
+                  width:double.infinity,
                   fit: BoxFit.cover,
                   filterQuality: FilterQuality.none,
                 );
@@ -36,6 +36,7 @@ class MosaicoImageField extends MosaicoField<MosaicoImageFieldState> {
                 return Container();
               }
             }),
+            Text("Image will be in " + state.getDimensions() + " format"),
           ],
         );
       },
@@ -47,6 +48,26 @@ class MosaicoImageFieldState extends MosaicoFieldState {
 
   /// The actual data of the image in PPM format
   String? _ppm;
+
+  /// The image dimensions
+  int _width = 64;
+  int get width => _width;
+  int _height = 64;
+  int get height => _height;
+  void setDimensions(int width, int height) {
+
+    if(width > 64 || height > 64)
+    {
+      throw Exception('Image dimensions must be less than 64x64');
+    }
+
+    _width = width;
+    _height = height;
+  }
+  String getDimensions() {
+    return '$_width x $_height';
+  }
+
 
   /// An image preview in bytes
   Uint8List? _imageBytes;
@@ -62,9 +83,11 @@ class MosaicoImageFieldState extends MosaicoFieldState {
     }
 
     // Ask user to crop it in square
+    var ratioX = _width / _height;
+    var ratioY = _height / _width;
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: image.path,
-      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1)
+      aspectRatio: CropAspectRatio(ratioX: ratioX, ratioY: ratioY),
     );
     if (croppedFile == null) {
       return; // User cancelled
@@ -80,9 +103,8 @@ class MosaicoImageFieldState extends MosaicoFieldState {
       return; // Error decoding image
     }
 
-    // Resize image to 64x64
     img.Image resizedImage =
-        img.copyResize(decodedImage, width: 64, height: 64);
+        img.copyResize(decodedImage, width: _width, height: _height);
 
     // Convert to PPM format
     _ppm = _convertToPPM(resizedImage);

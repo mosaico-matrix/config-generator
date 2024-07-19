@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:mosaico_flutter_core/common/widgets/mosaico_button.dart';
 import 'package:mosaico_flutter_core/common/widgets/renamable_app_bar.dart';
 import 'package:mosaico_flutter_core/core/utils/toaster.dart';
 import 'package:provider/provider.dart';
@@ -28,55 +29,80 @@ class ConfigFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // Create the form based on the JSON provided
-    var formModel = DynamicFormStateBuilder(_configForm,oldConfigDirPath).buildFormModel();
+    try {
+      var formModel = DynamicFormStateBuilder(_configForm, oldConfigDirPath)
+          .buildFormModel();
 
-    // Check if provided config name
-    formModel.setConfigName(initialConfigName ?? "");
+      // Check if provided config name
+      formModel.setConfigName(initialConfigName ?? "");
 
-    // Create page
-    return MobileSize(
-      child: ChangeNotifierProvider(
-        create: (context) => formModel,
-        child: Builder(builder: (context) {
-          return Scaffold(
-            appBar: RenamableAppBar(
-              promptText: "Enter configuration name",
-              askOnLoad: initialConfigName == null,
-              initialTitle:
-                  Provider.of<DynamicFormState>(context).getConfigName(),
-              onTitleChanged: (String newName) {
-                Provider.of<DynamicFormState>(context, listen: false)
-                    .setConfigName(newName);
+      // Create page
+      return MobileSize(
+        child: ChangeNotifierProvider(
+          create: (context) => formModel,
+          child: Builder(builder: (context) {
+            return Scaffold(
+              appBar: RenamableAppBar(
+                promptText: "Enter configuration name",
+                askOnLoad: initialConfigName == null,
+                initialTitle:
+                    Provider.of<DynamicFormState>(context).getConfigName(),
+                onTitleChanged: (String newName) {
+                  Provider.of<DynamicFormState>(context, listen: false)
+                      .setConfigName(newName);
+                },
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async {
+                  // Get form state
+                  var formState =
+                      Provider.of<DynamicFormState>(context, listen: false);
+
+                  // Try to validate the form
+                  if (!formState.validate()) {
+                    return;
+                  }
+
+                  // Check if entered name
+                  if (formState.getConfigName().isEmpty) {
+                    Toaster.warning(
+                        "Please enter a name for the configuration");
+                    return;
+                  }
+
+                  // Get output model with all the needed data
+                  Navigator.of(context).pop(await formState.export());
+                },
+                child: const Icon(Icons.save),
+              ),
+              body: DynamicForm(),
+            );
+          }),
+        ),
+      );
+    } catch (e) {
+      return Scaffold(
+          body: Center(
+              child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Error while building the form: $e",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 20, color: Colors.red)),
+            const SizedBox(height: 16),
+            MosaicoButton(
+              text: "Close",
+              onPressed: () {
+                Navigator.of(context).pop();
               },
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                // Get form state
-                var formState =
-                    Provider.of<DynamicFormState>(context, listen: false);
-
-                // Try to validate the form
-                if (!formState.validate()) {
-                  return;
-                }
-
-                // Check if entered name
-                if (formState.getConfigName().isEmpty) {
-                  Toaster.warning("Please enter a name for the configuration");
-                  return;
-                }
-
-                // Get output model with all the needed data
-                Navigator.of(context).pop(await formState.export());
-              },
-              child: const Icon(Icons.save),
-            ),
-            body: DynamicForm(),
-          );
-        }),
-      ),
-    );
+            )
+          ],
+        ),
+      )));
+    }
   }
 }

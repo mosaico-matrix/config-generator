@@ -39,7 +39,7 @@ class CoapService {
   static Future<dynamic> _processResponse(CoapResponse response) async {
     // Decode from json
     final decodedResponse = json.decode(response.payloadString);
-    //logger.d(decodedResponse);
+    logger.d(decodedResponse);
 
     // Check if need to display a message
     final message = decodedResponse['message'];

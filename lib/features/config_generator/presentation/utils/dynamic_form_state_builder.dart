@@ -58,6 +58,10 @@ class DynamicFormStateBuilder {
             break;
           case 'image':
             mosaicoField = MosaicoImageField();
+            if (attributes['dimensions'] != null) {
+              var dimensions = attributes['dimensions'];
+              (mosaicoField as MosaicoImageField).getState().setDimensions(dimensions['width'], dimensions['height']);
+            }
             break;
           case 'color':
             mosaicoField = MosaicoColorField();

@@ -24,7 +24,7 @@ class MosaicoWidgetMetadata implements Serializable {
         widgetVersion: json['widget_version'],
         softwareVersion: json['software_version'],
         fps: json['fps'],
-        configurable: json['configurable']);
+        configurable:json['configurable']);
   }
 
   @override
