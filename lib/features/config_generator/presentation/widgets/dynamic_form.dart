@@ -65,6 +65,7 @@ class DynamicForm extends StatelessWidget {
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               // Render form description
               Text(description,
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15, color: Colors.grey)),
             ],
           ),
