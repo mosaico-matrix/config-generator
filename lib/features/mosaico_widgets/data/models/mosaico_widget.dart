@@ -16,7 +16,9 @@ class MosaicoWidget implements Serializable {
   final String description;
   final String tagline;
   String? repositoryUrl;
-  String get iconUrl => Configs.apiUrl + '/widgets/$id/icon';
+  String get iconUrl =>
+      storeId == null ? Configs.apiUrl + '/widgets/$id/icon' :
+      Configs.apiUrl + '/widgets/$storeId/icon';
   final List<String>? images;
   bool? installed;
   MosaicoWidgetMetadata? metadata;
