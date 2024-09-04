@@ -1,39 +1,42 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Mosaico Flutter Core
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+Welcome to the Mosaico Flutter Core repository! 
+This repository contains the core UI/Logic code for the client-side applications of Mosaico and IDE.
+---
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Table of Contents
 
-## Features
+1. [Introduction](#introduction)
+2. [Requirements](#requirements)
+3. [Installation](#installation)
+---
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Introduction
+Mosaico allows users and developers to create, share, and display custom widgets on an LED matrix.
+More infos about the project can be found on the [Mosaico Website](https://mosaico.murkrowdev.org).
 
-## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+## Requirements
+- Flutter SDK
 
-## Usage
+---
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+## Installation
+For now, no binaries are provided. Just clone the repository and run the project with Flutter.
 
-```dart
-const like = 'sample';
-```
+---
 
-## Additional information
+## Contributing
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+We welcome contributions! Feel free to open an issue or submit a pull request.
+
+---
+
+## License
+
+This software is licensed under the AGPL-3.0 License. A copy of the license can be found in the [LICENSE](./LICENSE) file.
+
+---
+
+Feel free to reach out if you have any questions or need further assistance!
