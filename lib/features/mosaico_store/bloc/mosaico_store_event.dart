@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:mosaico_flutter_core/features/mosaico_store/bloc/mosaico_store_state.dart';
+import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaico_widget.dart';
 
 abstract class MosaicoStoreEvent extends Equatable {}
 
@@ -8,10 +10,11 @@ class LoadMosaicoStoreEvent extends MosaicoStoreEvent {
 }
 
 class InstallMosaicoWidgetEvent extends MosaicoStoreEvent {
-  final String widgetId;
+  final int storeId;
+  final MosaicoStoreLoadedState previousState;
 
-  InstallMosaicoWidgetEvent({required this.widgetId});
+  InstallMosaicoWidgetEvent({required this.storeId, required this.previousState});
 
   @override
-  List<Object> get props => [widgetId];
+  List<Object> get props => [storeId, previousState];
 }

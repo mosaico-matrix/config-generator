@@ -15,7 +15,6 @@ import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
-
   /// Logger
   final logger = Logger(printer: PrettyPrinter());
 
@@ -25,6 +24,12 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
   MatrixDeviceBloc({required this.widgetsRepository})
       : super(MatrixDeviceInitialState()) {
     on<ConnectToMatrixEvent>(_onConnectToMatrix);
+    on<UpdateMatrixDeviceStateEvent>(_onUpdateMatrixDeviceState);
+  }
+
+  Future<void> _onUpdateMatrixDeviceState(
+      UpdateMatrixDeviceStateEvent event, Emitter<MatrixDeviceState> emit) async {
+    emit(event.state);
   }
 
   Future<void> _onConnectToMatrix(
@@ -34,15 +39,25 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
     logger.i('Checking connection status');
     emit(MatrixDeviceConnectingState());
 
+    // Check if user provided a manual address for matrix
+    if(event.address != null)
+    {
+      // Save the address to the preferences as the new default
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('matrixIp', event.address!);
+    }
+
     // Try to get matrix IP
     var matrixAddress = event.address ?? await _autoGetMatrixIp();
 
-    // If we have an address, try to ping it
-    if (matrixAddress == null || await _pingMatrix(matrixAddress) == false) {
+    // Could not get the matrix IP or Matrix is not reachable, try with BLE
+    // We only try with ble if user didn't explicitly provide an address
+    if (event.address == null &&
+        (matrixAddress == null || await CoapService.pingMatrix(matrixAddress) == false)) {
 
       // Failed to connect via COAP, try BLE
       var bleConnected = _bleDeviceConnected();
-      if(!bleConnected) {
+      if (!bleConnected) {
         await _searchAndConnectBleDevice();
         bleConnected = _bleDeviceConnected();
       }
@@ -65,6 +80,7 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
     }
 
     // We are connected now!
+    widgetsRepository.clearCache(); // We could be connected to new matrix
     emit(MatrixDeviceConnectedState(address: matrixAddress));
     CoapService.setMatrixIp(matrixAddress);
 
@@ -78,7 +94,6 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
     } catch (e) {
       Toaster.error("Failed to get active widget");
     }
-
   }
 
   /// Tries to get the matrix IP from the preferences, with BLE characteristics or the debug IP
@@ -88,7 +103,7 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
 
     // Try to get the matrix IP from the preferences
     var lastKnownMatrixIp = prefs.getString('matrixIp');
-    if (lastKnownMatrixIp != null && await _pingMatrix(lastKnownMatrixIp))
+    if (lastKnownMatrixIp != null && await CoapService.pingMatrix(lastKnownMatrixIp))
       return lastKnownMatrixIp;
 
     // IP from settings did not work, try with BLE
@@ -98,7 +113,7 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
     try {
       ensureBleDeviceConnected();
       var ipFromBle = await _matrixBleService.getMatrixIp(_connectedMatrix!);
-      if (ipFromBle != null && await _pingMatrix(ipFromBle)) {
+      if (ipFromBle != null && await CoapService.pingMatrix(ipFromBle)) {
         prefs.setString('matrixIp', ipFromBle);
         return ipFromBle;
       }
@@ -107,29 +122,12 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
     }
 
     // As final resort, use the debug IP
-    if (await _pingMatrix(Configs.debugMatrixIp)) {
+    if (await CoapService.pingMatrix(Configs.debugMatrixIp)) {
       prefs.setString('matrixIp', Configs.debugMatrixIp);
       return Configs.debugMatrixIp;
     }
 
     return null;
-  }
-
-  /// Pings the matrix to check if it's reachable
-  Future<bool> _pingMatrix(String ip) async {
-    try {
-      var client = CoapClient(
-          Uri(
-            scheme: 'coap',
-            host: ip,
-            port: 5683,
-          ),
-          config: CoapConfig());
-
-      return await client.ping().timeout(Duration(seconds: 5));
-    } catch (e) {
-      return false;
-    }
   }
 
   /*

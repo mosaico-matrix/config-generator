@@ -13,18 +13,26 @@ class MosaicoWidgetsCoapRepository {
 
   static const String _baseUri = '/widgets';
 
+  // Memory cache to prevent multiple requests
+  List<MosaicoWidget> _installedWidgets = [];
+
   Future<MosaicoWidget> installWidget({required int storeId}) async {
     var result = await CoapService.post(_baseUri + '/installed/widget_store_id=$storeId', '');
-    return MosaicoWidget.fromJson(result);
+    var installedWidget = MosaicoWidget.fromJson(result);
+    _installedWidgets.add(installedWidget);
+    return installedWidget;
   }
 
   Future<void> uninstallWidget({required int widgetId}) async {
     await CoapService.delete(_baseUri + '/installed/widget_id=$widgetId');
+    _installedWidgets.removeWhere((element) => element.id == widgetId);
   }
 
   Future<List<MosaicoWidget>> getInstalledWidgets() async {
     final data = await CoapService.get(_baseUri + '/installed/1=1');
-    return List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
+    var widgets = List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
+    _installedWidgets = widgets;
+    return widgets;
   }
 
   Future<void> previewWidget({required int widgetId, int? configurationId}) async {
@@ -56,8 +64,14 @@ class MosaicoWidgetsCoapRepository {
 
     // Send the configuration to the matrix
     final data = await CoapService.post(_baseUri + '/developed', '$projectName,$fileBase64');
-    return MosaicoWidget.fromJson(data);
+    var widget = MosaicoWidget.fromJson(data);
+    _installedWidgets.add(widget);
+    return widget;
   }
 
+
+  void clearCache() {
+    _installedWidgets = [];
+  }
 
 }

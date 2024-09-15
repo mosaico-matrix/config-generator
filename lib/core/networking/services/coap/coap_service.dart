@@ -87,7 +87,25 @@ class CoapService {
     }
   }
 
-  // DONT KNOW WHY THIS MAKES A POST REQUEST
+  /// Pings the matrix to check if it's reachable
+  static Future<bool> pingMatrix(String ip) async {
+    try {
+      var client = CoapClient(
+          Uri(
+            scheme: 'coap',
+            host: ip,
+            port: 5683,
+          ),
+          config: CoapConfig());
+
+      return await client.ping().timeout(Duration(seconds: 5));
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+// DONT KNOW WHY THIS MAKES A POST REQUEST
   // static Future<dynamic> put(String path, String payload,
   //     [List<Option<Object>>? options]) async {
   //   logger.d("PUT: $path");

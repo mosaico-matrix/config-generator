@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'matrix_device_state.dart';
+
 abstract class MatrixDeviceEvent extends Equatable {}
 
 class ConnectToMatrixEvent extends MatrixDeviceEvent {
@@ -9,4 +11,14 @@ class ConnectToMatrixEvent extends MatrixDeviceEvent {
 
   @override
   List<Object> get props => [];
+}
+
+class UpdateMatrixDeviceStateEvent extends MatrixDeviceEvent
+{
+  final MatrixDeviceConnectedState state;
+
+  UpdateMatrixDeviceStateEvent(this.state);
+
+  @override
+  List<Object> get props => [state];
 }

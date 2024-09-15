@@ -14,12 +14,14 @@ class MosaicoStoreLoadingState extends MosaicoStoreState {
 }
 
 class MosaicoStoreLoadedState extends MosaicoStoreState {
-  final List<MosaicoWidget> widgets;
+  final int? installingWidgetId;
+  final List<MosaicoWidget> storeWidgets;
+  final List<MosaicoWidget> installedWidgets;
 
-  MosaicoStoreLoadedState({required this.widgets});
+  MosaicoStoreLoadedState({required this.storeWidgets, required this.installedWidgets, this.installingWidgetId});
 
   @override
-  List<Object> get props => [widgets];
+  List<Object> get props => [storeWidgets, installingWidgetId ?? 0];
 }
 
 class MosaicoStoreErrorState extends MosaicoStoreState {
