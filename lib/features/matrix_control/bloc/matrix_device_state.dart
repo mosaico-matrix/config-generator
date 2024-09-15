@@ -25,12 +25,12 @@ class MatrixDeviceConnectedState extends MatrixDeviceState {
   @override
   List<Object> get props => [activeWidget ?? '', activeWidgetConfiguration ?? '', address];
 
-  MatrixDeviceConnectedState copyWith({MosaicoWidget? activeWidget, MosaicoWidgetConfiguration? activeWidgetConfiguration}) {
+  MatrixDeviceConnectedState copyWith({required MosaicoWidget? activeWidget, required MosaicoWidgetConfiguration? activeWidgetConfiguration}) {
     return MatrixDeviceConnectedState(
       address: this.address,
       newConnection: false,
-      activeWidget: activeWidget ?? this.activeWidget,
-      activeWidgetConfiguration: activeWidgetConfiguration ?? this.activeWidgetConfiguration
+      activeWidget: activeWidget,
+      activeWidgetConfiguration: activeWidgetConfiguration
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:mosaico_flutter_core/features/mosaico_store/bloc/mosaico_store_e
 import 'package:mosaico_flutter_core/features/mosaico_store/bloc/mosaico_store_state.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/bloc/mosaico_installed_widgets_event.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/bloc/mosaico_installed_widgets_state.dart';
+import 'package:mosaico_flutter_core/features/mosaico_widgets/data/models/mosaico_widget.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/mosaico_widgets_coap_repository.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/mosaico_widgets_rest_repository.dart';
 
@@ -39,10 +40,12 @@ class MosaicoStoreBloc extends Bloc<MosaicoStoreEvent, MosaicoStoreState> {
         storeWidgets: event.previousState.storeWidgets,
         installedWidgets: event.previousState.installedWidgets));
     try {
-      await widgetsCoapRepository.installWidget(storeId: event.storeId);
+      var newWidget = await widgetsCoapRepository.installWidget(storeId: event.storeId);
+      var installedWidgets = List<MosaicoWidget>.from(event.previousState.installedWidgets);
+      installedWidgets.add(newWidget);
       emit(MosaicoStoreLoadedState(
           storeWidgets: event.previousState.storeWidgets,
-          installedWidgets: event.previousState.installedWidgets));
+          installedWidgets: installedWidgets));
     } catch (e) {
       Toaster.error("Error installing widget");
       emit(MosaicoStoreLoadedState(
