@@ -3,6 +3,7 @@ import 'package:mosaico_flutter_core/core/configuration/configs.dart';
 import 'package:mosaico_flutter_core/core/networking/services/ble/ble_connection_manager.dart';
 
 class MatrixBleService {
+
   // Characteristic UUIDs
   static Guid WIFI_CREDENTIALS = Guid("9d0e35da-bc0f-473e-a32c-25d33eaae17b");
   static Guid LOCAL_IP = Guid("9d0e35da-bc0f-473e-a32c-25d33eaae17c");

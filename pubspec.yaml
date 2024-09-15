@@ -11,8 +11,10 @@ dependencies:
   archive: ^3.6.1
   auto_size_text: ^3.0.0
   coap: ^9.0.4
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.6
   flutter_blue_plus: ^1.32.8
   flutter_colorpicker: ^1.1.0
   http: ^1.2.1

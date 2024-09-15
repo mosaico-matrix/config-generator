@@ -23,7 +23,7 @@ class MosaicoDeviceState with ChangeNotifier {
   final logger = Logger(printer: PrettyPrinter());
 
   /// Repository
-  MosaicoLocalWidgetsRepository widgetsRepository =
+  MosaicoWidgetsCoapRepository widgetsRepository =
       MosaicoWidgetsCoapRepository();
 
   /// Connection status
@@ -85,7 +85,7 @@ class MosaicoDeviceState with ChangeNotifier {
 
     // Ping matrix again in x seconds
     // TODO: view gh issue to improve this in future
-    // Timer.periodic(Duration(seconds: 15), (timer) async {
+    // Timer.periodic(Duration(seconds: 10), (timer) async {
     //   _resetConnectionStatus();
     //   timer.cancel();
     //   connect();

@@ -5,7 +5,8 @@ import 'package:mosaico_flutter_core/common/widgets/matrices/no_data_matrix.dart
 class EmptyPlaceholder extends StatelessWidget {
 
   final String? hintText;
-  const EmptyPlaceholder({super.key, this.hintText});
+  final Function? onRetry;
+  const EmptyPlaceholder({super.key, this.hintText, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,13 @@ class EmptyPlaceholder extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white60)
               ),
+            ),
+          if (onRetry != null)
+            ElevatedButton(
+              onPressed: () {
+                onRetry!();
+              },
+              child: const Text('Retry'),
             ),
         ],
       ));

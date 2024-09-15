@@ -6,13 +6,12 @@ import '../states/mosaico_loading_state.dart';
 
 class MosaicoLoadingWrapper extends StatelessWidget {
   final Widget child;
-  final MosaicoLoadingState state;
-  MosaicoLoadingWrapper({required this.child, required this.state});
+  MosaicoLoadingWrapper({required this.child});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MosaicoLoadingState>(
-      create: (context) => state,
+      create: (context) => MosaicoLoadingState(),
       child: Consumer<MosaicoLoadingState>(
         builder: (context, state, _) {
           return Directionality(

@@ -9,39 +9,35 @@ import '../../domain/repositories/mosaico_widgets_repository.dart';
 import '../models/mosaico_widget.dart';
 import '../models/mosaico_widget_configuration.dart';
 
-class MosaicoWidgetsCoapRepository implements MosaicoLocalWidgetsRepository {
+class MosaicoWidgetsCoapRepository {
 
   static const String _baseUri = '/widgets';
 
-  @override
   Future<MosaicoWidget> installWidget({required int storeId}) async {
     var result = await CoapService.post(_baseUri + '/installed/widget_store_id=$storeId', '');
     return MosaicoWidget.fromJson(result);
   }
 
-  @override
   Future<void> uninstallWidget({required int widgetId}) async {
     await CoapService.delete(_baseUri + '/installed/widget_id=$widgetId');
   }
 
-  @override
   Future<List<MosaicoWidget>> getInstalledWidgets() async {
     final data = await CoapService.get(_baseUri + '/installed/1=1');
     return List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
   }
 
-  @override
   Future<void> previewWidget({required int widgetId, int? configurationId}) async {
     await CoapService.post(
         _baseUri + '/active', '{"widget_id": $widgetId, "config_id": $configurationId}');
   }
 
-  @override
+
   Future<void> unsetActiveWidget() async {
     await CoapService.delete(_baseUri + '/active');
   }
 
-  @override
+
   Future<(MosaicoWidget?, MosaicoWidgetConfiguration?)> getActiveWidget() async {
     var result = await CoapService.get(_baseUri + '/active');
     return (
@@ -49,12 +45,10 @@ class MosaicoWidgetsCoapRepository implements MosaicoLocalWidgetsRepository {
         result['config'] == null ? null : MosaicoWidgetConfiguration.fromJson(result['config']));
   }
 
-  @override
   Future<Map<String, dynamic>> getWidgetConfigurationForm({required int widgetId}) async {
     return await CoapService.get(_baseUri + '/configuration_form/widget_id=$widgetId');
   }
 
-  @override
   Future<MosaicoWidget> installDevelopedWidget({required String projectName, required String archivePath}) async {
 
     final file = File(archivePath);
