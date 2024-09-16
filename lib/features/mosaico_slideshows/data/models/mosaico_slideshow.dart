@@ -27,4 +27,14 @@ class MosaicoSlideshow implements Serializable
       'items': items.map((item) => item.toJson()).toList()
     };
   }
+
+  MosaicoSlideshow copyWith({
+    String? name,
+    List<MosaicoSlideshowItem>? items,
+  }) {
+    return MosaicoSlideshow(
+      name: name ?? this.name,
+      items: items ?? List.from(this.items),
+    );
+  }
 }

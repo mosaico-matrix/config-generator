@@ -8,8 +8,7 @@ class MosaicoSlideshowItem implements Serializable
   int position;
   int secondsDuration;
 
-  // This one is only used in the UI
-  bool shouldSelectConfiguration = false;
+
   MosaicoSlideshowItem({
     this.id = -1,
     this.widgetId = -1,
@@ -40,4 +39,19 @@ class MosaicoSlideshowItem implements Serializable
     };
   }
 
+  MosaicoSlideshowItem copyWith({
+    int? id,
+    int? widgetId,
+    int? configId,
+    int? position,
+    int? secondsDuration
+  }) {
+    return MosaicoSlideshowItem(
+      id: id ?? this.id,
+      widgetId: widgetId ?? this.widgetId,
+      configId: configId ?? this.configId,
+      position: position ?? this.position,
+      secondsDuration: secondsDuration ?? this.secondsDuration
+    );
+  }
 }

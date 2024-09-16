@@ -29,6 +29,9 @@ class MosaicoWidgetsCoapRepository {
   }
 
   Future<List<MosaicoWidget>> getInstalledWidgets() async {
+    if (_installedWidgets.isNotEmpty) {
+      return _installedWidgets;
+    }
     final data = await CoapService.get(_baseUri + '/installed/1=1');
     var widgets = List<MosaicoWidget>.from(data.map((widget) => MosaicoWidget.fromJson(widget)));
     _installedWidgets = widgets;
@@ -68,6 +71,7 @@ class MosaicoWidgetsCoapRepository {
     _installedWidgets.add(widget);
     return widget;
   }
+
 
 
   void clearCache() {
