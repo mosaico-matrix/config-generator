@@ -17,7 +17,6 @@ import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
-
   /// Logger
   final logger = Logger(printer: PrettyPrinter());
 
@@ -25,22 +24,23 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
   final MosaicoWidgetsCoapRepository widgetsRepository;
   final MosaicoWidgetConfigurationsCoapRepository configurationsRepository;
 
-  MatrixDeviceBloc({required this.widgetsRepository, required this.configurationsRepository})
+  MatrixDeviceBloc(
+      {required this.widgetsRepository, required this.configurationsRepository})
       : super(MatrixDeviceInitialState()) {
     on<ConnectToMatrixEvent>(_onConnectToMatrix);
     on<UpdateMatrixDeviceStateEvent>(_onUpdateMatrixDeviceState);
-    on<PingMatrixAndRefreshActiveWidgetEvent>(_onPingMatrixAndRefreshActiveWidget);
+    on<PingMatrixAndRefreshActiveWidgetEvent>(
+        _onPingMatrixAndRefreshActiveWidget);
   }
 
-  Future<void> _onUpdateMatrixDeviceState(
-      UpdateMatrixDeviceStateEvent event, Emitter<MatrixDeviceState> emit) async {
+  Future<void> _onUpdateMatrixDeviceState(UpdateMatrixDeviceStateEvent event,
+      Emitter<MatrixDeviceState> emit) async {
     emit(event.newState);
   }
 
   Future<void> _onPingMatrixAndRefreshActiveWidget(
       PingMatrixAndRefreshActiveWidgetEvent event,
       Emitter<MatrixDeviceState> emit) async {
-
     // Get active widget
     try {
       var result = await widgetsRepository.getActiveWidget();
@@ -53,16 +53,14 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
     }
   }
 
-    Future<void> _onConnectToMatrix(
+  Future<void> _onConnectToMatrix(
       ConnectToMatrixEvent event, Emitter<MatrixDeviceState> emit) async {
-
     // Start connection
     logger.i('Checking connection status');
     emit(MatrixDeviceConnectingState());
 
     // Check if user provided a manual address for matrix
-    if(event.address != null)
-    {
+    if (event.address != null) {
       // Save the address to the preferences as the new default
       var prefs = await SharedPreferences.getInstance();
       prefs.setString('matrixIp', event.address!);
@@ -74,8 +72,8 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
     // Could not get the matrix IP or Matrix is not reachable, try with BLE
     // We only try with ble if user didn't explicitly provide an address
     if (event.address == null &&
-        (matrixAddress == null || await CoapService.pingMatrix(matrixAddress) == false)) {
-
+        (matrixAddress == null ||
+            await CoapService.pingMatrix(matrixAddress) == false)) {
       // Failed to connect via COAP, try BLE
       var bleConnected = _bleDeviceConnected();
       if (!bleConnected) {
@@ -84,9 +82,15 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
       }
 
       // Notify user of ble status
-      emit(MatrixDeviceDisconnectedState(bleConnected: bleConnected));
-      if (!bleConnected) {
-        // Nothing left to be done, we failed without a matrix IP
+      if (state is! MatrixDeviceConnectedState) {
+        emit(MatrixDeviceDisconnectedState(bleConnected: bleConnected));
+        if (!bleConnected) {
+          // Nothing left to be done, we failed without a matrix IP
+          return;
+        }
+      } else {
+        // WTF are we still checking, we are already connected
+        // BTW this can happen if the user manually connects to the matrix while we were previously checking
         return;
       }
 
@@ -96,13 +100,17 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
 
     // If we still don't have the matrix IP, we failed
     if (matrixAddress == null) {
-      emit(MatrixDeviceDisconnectedState(bleConnected: _bleDeviceConnected()));
+      if (state is! MatrixDeviceConnectedState) {
+        emit(
+            MatrixDeviceDisconnectedState(bleConnected: _bleDeviceConnected()));
+      }
       return;
     }
 
     // We are connected now!
     widgetsRepository.clearCache(); // We could be connected to new matrix
-    configurationsRepository.clearCache(); // We could be connected to new matrix
+    configurationsRepository
+        .clearCache(); // We could be connected to new matrix
     emit(MatrixDeviceConnectedState(address: matrixAddress));
     CoapService.setMatrixIp(matrixAddress);
 
@@ -125,7 +133,8 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
 
     // Try to get the matrix IP from the preferences
     var lastKnownMatrixIp = prefs.getString('matrixIp');
-    if (lastKnownMatrixIp != null && await CoapService.pingMatrix(lastKnownMatrixIp))
+    if (lastKnownMatrixIp != null &&
+        await CoapService.pingMatrix(lastKnownMatrixIp))
       return lastKnownMatrixIp;
 
     // IP from settings did not work, try with BLE
@@ -282,5 +291,4 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
         .where((isScanning) => isScanning == false)
         .first;
   }
-
-  }
+}

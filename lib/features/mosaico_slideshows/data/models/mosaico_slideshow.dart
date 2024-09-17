@@ -4,7 +4,7 @@ import 'mosaico_slideshow_item.dart';
 
 class MosaicoSlideshow implements Serializable
 {
-  final int? id;
+   int? id;
   String name;
   List<MosaicoSlideshowItem> items;
   MosaicoSlideshow({this.id, this.name = "New slideshow", List<MosaicoSlideshowItem>? items})
