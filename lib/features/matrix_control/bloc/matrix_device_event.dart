@@ -15,10 +15,20 @@ class ConnectToMatrixEvent extends MatrixDeviceEvent {
 
 class UpdateMatrixDeviceStateEvent extends MatrixDeviceEvent
 {
-  final MatrixDeviceConnectedState state;
+  final MatrixDeviceConnectedState newState;
 
-  UpdateMatrixDeviceStateEvent(this.state);
+  UpdateMatrixDeviceStateEvent(this.newState);
 
   @override
-  List<Object> get props => [state];
+  List<Object> get props => [newState];
+}
+
+class PingMatrixAndRefreshActiveWidgetEvent extends MatrixDeviceEvent
+{
+  final MatrixDeviceConnectedState previousState;
+  
+  PingMatrixAndRefreshActiveWidgetEvent(this.previousState);
+
+  @override
+  List<Object> get props => [previousState];
 }

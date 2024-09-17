@@ -68,6 +68,19 @@ class MosaicoWidgetsCoapRepository {
     return widget;
   }
 
+  List<MosaicoWidget> getInstalledWidgetsFromCache() {
+    return _installedWidgets;
+  }
+
+  MosaicoWidget? getByIdFromCache(int id) {
+    for (var widget in _installedWidgets) {
+      if (widget.id == id) {
+        return widget;
+      }
+    }
+    return null;
+  }
+
   void clearCache() {
     _installedWidgets = [];
   }

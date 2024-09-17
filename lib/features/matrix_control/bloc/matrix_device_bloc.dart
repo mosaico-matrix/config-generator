@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:coap/coap.dart';
@@ -28,14 +29,31 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
       : super(MatrixDeviceInitialState()) {
     on<ConnectToMatrixEvent>(_onConnectToMatrix);
     on<UpdateMatrixDeviceStateEvent>(_onUpdateMatrixDeviceState);
+    on<PingMatrixAndRefreshActiveWidgetEvent>(_onPingMatrixAndRefreshActiveWidget);
   }
 
   Future<void> _onUpdateMatrixDeviceState(
       UpdateMatrixDeviceStateEvent event, Emitter<MatrixDeviceState> emit) async {
-    emit(event.state);
+    emit(event.newState);
   }
 
-  Future<void> _onConnectToMatrix(
+  Future<void> _onPingMatrixAndRefreshActiveWidget(
+      PingMatrixAndRefreshActiveWidgetEvent event,
+      Emitter<MatrixDeviceState> emit) async {
+
+    // Get active widget
+    try {
+      var result = await widgetsRepository.getActiveWidget();
+      emit(MatrixDeviceConnectedState(
+          address: event.previousState.address,
+          activeWidget: result.$1,
+          activeWidgetConfiguration: result.$2));
+    } catch (e) {
+      emit(MatrixDeviceDisconnectedState(bleConnected: _bleDeviceConnected()));
+    }
+  }
+
+    Future<void> _onConnectToMatrix(
       ConnectToMatrixEvent event, Emitter<MatrixDeviceState> emit) async {
 
     // Start connection
@@ -264,4 +282,5 @@ class MatrixDeviceBloc extends Bloc<MatrixDeviceEvent, MatrixDeviceState> {
         .where((isScanning) => isScanning == false)
         .first;
   }
-}
+
+  }
