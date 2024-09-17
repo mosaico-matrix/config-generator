@@ -90,7 +90,7 @@ class ConfigFormPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Error while building the form: $e",
+            Text("${e.toString()}",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20, color: Colors.red)),
             const SizedBox(height: 16),
