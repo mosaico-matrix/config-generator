@@ -2,10 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:mosaico_flutter_core/core/networking/services/coap/coap_service.dart';
-
-import '../../../../core/networking/services/rest/rest_service.dart';
-import '../../domain/repositories/mosaico_local_widgets_repository.dart';
-import '../../domain/repositories/mosaico_widgets_repository.dart';
 import '../models/mosaico_widget.dart';
 import '../models/mosaico_widget_configuration.dart';
 
@@ -71,8 +67,6 @@ class MosaicoWidgetsCoapRepository {
     _installedWidgets.add(widget);
     return widget;
   }
-
-
 
   void clearCache() {
     _installedWidgets = [];

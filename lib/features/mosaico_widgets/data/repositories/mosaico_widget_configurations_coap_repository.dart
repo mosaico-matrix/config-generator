@@ -68,6 +68,12 @@ class MosaicoWidgetConfigurationsCoapRepository {
     return configurations;
   }
 
+
+  Future<bool> isWidgetConfigurable({required int widgetId}) async {
+    final configurations = await getWidgetConfigurations(widgetId: widgetId);
+    return configurations.isNotEmpty;
+  }
+
   Future<void> deleteWidgetConfiguration({required int configurationId}) async {
     await CoapService.delete('/widget_configurations/configuration_id=$configurationId');
 

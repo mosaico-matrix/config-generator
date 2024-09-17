@@ -10,7 +10,7 @@ import 'package:mosaico_flutter_core/core/networking/services/coap/coap_service.
 import 'package:mosaico_flutter_core/core/utils/toaster.dart';
 import 'package:mosaico_flutter_core/features/matrix_control/bloc/matrix_device_event.dart';
 import 'package:mosaico_flutter_core/features/matrix_control/bloc/matrix_device_state.dart';
-import 'package:mosaico_flutter_core/features/matrix_control/domain/usecases/matrix_ble_service.dart';
+import 'package:mosaico_flutter_core/features/matrix_control/domain/matrix_ble_service.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/mosaico_widget_configurations_coap_repository.dart';
 import 'package:mosaico_flutter_core/features/mosaico_widgets/data/repositories/mosaico_widgets_coap_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';

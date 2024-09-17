@@ -14,7 +14,7 @@ class MosaicoSlideshowItem implements Serializable
     this.widgetId = -1,
     this.configId,
     this.position= 0,
-    this.secondsDuration=30,
+    this.secondsDuration=0,
   });
 
   factory MosaicoSlideshowItem.fromJson(Map<String, dynamic> json)
@@ -42,16 +42,17 @@ class MosaicoSlideshowItem implements Serializable
   MosaicoSlideshowItem copyWith({
     int? id,
     int? widgetId,
-    int? configId,
+    required int? configId,
     int? position,
-    int? secondsDuration
+    int? secondsDuration,
   }) {
     return MosaicoSlideshowItem(
       id: id ?? this.id,
       widgetId: widgetId ?? this.widgetId,
-      configId: configId ?? this.configId,
+      configId: configId,
       position: position ?? this.position,
-      secondsDuration: secondsDuration ?? this.secondsDuration
+      secondsDuration: secondsDuration ?? this.secondsDuration,
     );
   }
+
 }
