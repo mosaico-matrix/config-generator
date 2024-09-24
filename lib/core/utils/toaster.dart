@@ -41,37 +41,37 @@ class Toaster {
       // animationReverseDuration: const Duration(seconds: 3),
       duration: const Duration(seconds: 3),
       align: _alignment,
+      clickClose: true,
       toastBuilder: (cancel) {
-        return Flexible(
-          child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-             // margin: const EdgeInsets.symmetric(horizontal: 50),
-              //margin: const EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: color.withOpacity(0.95),
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: color.withOpacity(0.95),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                color: Colors.white,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    icon,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    constraints: const BoxConstraints(maxWidth: 300),
-                    child: Text(
-
-                      message,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
+              const SizedBox(width: 10),
+              Flexible(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 300),
+                  child: Text(
+                    message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
-              )),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
